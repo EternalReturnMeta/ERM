@@ -113,6 +113,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _prefabBall: {fileID: 2049820399763191642, guid: 9a3ad529c822aa14ea3d0df4e1b4c8b2, type: 3}
+  _prefabPhysxBall: {fileID: 2656416725210459558, guid: bc9a7b1327c2885489dc8a7fa1f97a9a, type: 3}
 --- !u!1 &3228968744168765481
 GameObject:
   m_ObjectHideFlags: 0
