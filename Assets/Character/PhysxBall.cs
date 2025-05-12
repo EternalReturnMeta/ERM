@@ -5,6 +5,7 @@ public class PhysxBall : NetworkBehaviour
 {
     [Networked] private TickTimer life { get; set; }
 
+   
     public void Init(Vector3 forward)
     {
         life = TickTimer.CreateFromSeconds(Runner, 5.0f);

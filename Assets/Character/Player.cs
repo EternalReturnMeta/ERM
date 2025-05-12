@@ -23,8 +23,6 @@ public class Player : NetworkBehaviour
         _cc = GetComponent<NetworkCharacterController>();
         _forward = transform.forward;
         _material = GetComponentInChildren<MeshRenderer>().material;
-        
-        
     }
     
     public override void Spawned()
@@ -65,7 +63,7 @@ public class Player : NetworkBehaviour
                 if (data.buttons.IsSet(NetworkInputData.MOUSEBUTTON0))
                 {
                     delay = TickTimer.CreateFromSeconds(Runner, 0.5f);
-                    Runner.Spawn(_prefabBall, transform.position+_forward, Quaternion.LookRotation(_forward));
+                    var obj = Runner.Spawn(_prefabBall, transform.position+_forward, Quaternion.LookRotation(_forward));
                     spawnedProjectile = !spawnedProjectile;
                     // Runner.Spawn(_prefabBall, transform.position+_forward, Quaternion.LookRotation(_forward), Object.InputAuthority,
                     //     (runner, o) =>
