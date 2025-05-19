@@ -8,4 +8,7 @@ public struct PlayerInputData : INetworkInput
    
    public NetworkButtons buttons;
    public Vector3 direction;
+   
+   public Vector2 LookRotationDelta;
+   public Vector3 MoveDirection;
 }
