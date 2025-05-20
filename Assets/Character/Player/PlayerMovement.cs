@@ -2,10 +2,9 @@ using Fusion;
 using Fusion.Addons.KCC;
 using UnityEngine;
 
-
 public class PlayerMovement : NetworkBehaviour
 {
-   private KCC KCC;
+   [SerializeField] private KCC KCC;
 
    private void Awake()
    {
@@ -42,4 +41,6 @@ public class PlayerMovement : NetworkBehaviour
          Debug.Log(inputDirection);
       }
    }
+   
+   
 }

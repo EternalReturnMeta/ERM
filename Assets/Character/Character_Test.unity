@@ -179,7 +179,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
+  field of view: 61.51779
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -205,13 +205,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalRotation: {x: 0.5, y: 0, z: 0, w: 0.8660254}
+  m_LocalPosition: {x: 0, y: 17.68, z: -13.81}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 60, y: 0, z: 0}
 --- !u!114 &330585547
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -387,11 +387,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 752184144510201328, guid: a9a01b53ae0735c4084b6235379d0f0d, type: 3}
       propertyPath: '_playerPrefab.RawGuidValue.Array.data[0]'
-      value: 8412104076491165556
+      value: -4289728015527397667
       objectReference: {fileID: 0}
     - target: {fileID: 752184144510201328, guid: a9a01b53ae0735c4084b6235379d0f0d, type: 3}
       propertyPath: '_playerPrefab.RawGuidValue.Array.data[1]'
-      value: 2386287453277479579
+      value: -8417826153794621846
       objectReference: {fileID: 0}
     - target: {fileID: 1100024897549953128, guid: a9a01b53ae0735c4084b6235379d0f0d, type: 3}
       propertyPath: m_Name
@@ -407,7 +407,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7329202023688904605, guid: a9a01b53ae0735c4084b6235379d0f0d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 5.28
       objectReference: {fileID: 0}
     - target: {fileID: 7329202023688904605, guid: a9a01b53ae0735c4084b6235379d0f0d, type: 3}
       propertyPath: m_LocalPosition.z
@@ -458,7 +458,8 @@ GameObject:
   - component: {fileID: 618509338}
   - component: {fileID: 618509337}
   - component: {fileID: 618509336}
-  m_Layer: 0
+  - component: {fileID: 618509340}
+  m_Layer: 10
   m_Name: Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -555,6 +556,38 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &618509340
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 618509335}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SerializedVersion: 0
+  m_AgentTypeID: 0
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 0
+  m_DefaultArea: 0
+  m_GenerateLinks: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.16666667
+  m_MinRegionArea: 2
+  m_NavMeshData: {fileID: 23800000, guid: 4ecee9055dd6a4d42a7a6d26d8227674, type: 2}
+  m_BuildHeightMesh: 0
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
