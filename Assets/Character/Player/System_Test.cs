@@ -9,22 +9,11 @@ using UnityEngine.SceneManagement;
 public class System_Test : MonoBehaviour, INetworkRunnerCallbacks
 {
     [SerializeField] private NetworkPrefabRef _playerPrefab;
+    [SerializeField] private NetworkObject _playerObjectPrefab;
     private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
 
     private NetworkRunner _Runner;
     
-    
-    private void Awake()
-    {
-        // _Runner = gameObject.AddComponent<NetworkRunner>();
-        // _Runner.ProvideInput = true;
-
-    }
-    
-    void Start()
-    {
-        //StartGame(GameMode.Host);
-    }
     
     private void OnGUI()
     {
@@ -46,9 +35,9 @@ public class System_Test : MonoBehaviour, INetworkRunnerCallbacks
         // // Create the Fusion runner and let it know that we will be providing user input
         _Runner = gameObject.AddComponent<NetworkRunner>();
         _Runner.ProvideInput = true;
-    
         gameObject.AddComponent<RunnerSimulatePhysics3D>();
-
+        
+        
         // Create the NetworkSceneInfo from the current scene
         var scene = SceneRef.FromIndex(SceneManager.GetActiveScene().buildIndex);
         var sceneInfo = new NetworkSceneInfo();
@@ -67,14 +56,8 @@ public class System_Test : MonoBehaviour, INetworkRunnerCallbacks
 
     }
 
-    void Update()
-    {
-        
-    }
-
     public void OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player)
     {
-        
     }
 
     public void OnObjectEnterAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player)
@@ -88,6 +71,10 @@ public class System_Test : MonoBehaviour, INetworkRunnerCallbacks
             // Create a unique position for the player
             Vector3 spawnPosition = new Vector3((player.RawEncoded % runner.Config.Simulation.PlayerCount) * 3, 1, 0);
             NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, spawnPosition, Quaternion.identity, player);
+            
+            runner.SetPlayerObject(player, networkPlayerObject);
+            
+            //runner.SetPlayerObject(player, networkPlayerObject);
             // Keep track of the player avatars for easy access
             _spawnedCharacters.Add(player, networkPlayerObject);
             

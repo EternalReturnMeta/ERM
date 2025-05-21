@@ -5,18 +5,22 @@ using UnityEngine.AI;
 public class NewPlayerMovement : NetworkBehaviour
 {
     public Camera mainCamera; // 카메라 참조
-    private NavMeshAgent navMeshAgent; // 플레이어의 NavMeshAgent
     public LayerMask groundLayer; // 바닥 레이어
+    [HideInInspector] public NavMeshAgent navMeshAgent; // 플레이어의 NavMeshAgent
     
     [Networked] public Vector3 TargetPosition { get; set; }
     
-    void Start()
+    [Networked] public float MoveSpeed { get; set; }
+
+    private void Awake()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
+    }
+    
+    void Start()
+    {
+        Debug.Log("33333333");
         mainCamera = Camera.main;
-        // LocalPlayer가 아니라면 네비게이션 비활성화 (서버 또는 다른 클라이언트 제어 방지)
-        //navMeshAgent.enabled = false;
-
     }
 
     // Update is called once per frame
