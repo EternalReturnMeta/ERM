@@ -5,23 +5,22 @@ public class PlayerAnimation : NetworkBehaviour
 {
     
     [SerializeField] private Animator animator;
-    private NewPlayerMovement movement;
+    private PlayerMovement movement;
     
-    private void Awake()
-    {
-       
-    }
     void Start()
     {
-        movement = GetComponent<NewPlayerMovement>();
+        movement = GetComponent<PlayerMovement>();
     }
-
-    void Update()
-    {
-    }
+    
     
     public override void Render()
     {
-        animator.SetFloat("MoveSpeed", movement.navMeshAgent.velocity.magnitude);
+        if (animator)
+        {
+            if (movement)
+            {
+                animator.SetFloat("MoveSpeed", movement.navMeshAgent.velocity.magnitude);
+            }
+        }
     }
 }

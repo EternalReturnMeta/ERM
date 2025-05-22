@@ -1,17 +1,17 @@
+using System.Collections;
 using Fusion;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class NewPlayerMovement : NetworkBehaviour
+public class PlayerMovement : NetworkBehaviour
 {
     public Camera mainCamera; // 카메라 참조
     public LayerMask groundLayer; // 바닥 레이어
     [HideInInspector] public NavMeshAgent navMeshAgent; // 플레이어의 NavMeshAgent
     
-    [Networked] public Vector3 TargetPosition { get; set; }
+    private Vector3 TargetPosition { get; set; }
     
-    [Networked] public float MoveSpeed { get; set; }
-
+    private Coroutine TempCoroutine;
     private void Awake()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
@@ -19,24 +19,24 @@ public class NewPlayerMovement : NetworkBehaviour
     
     void Start()
     {
-        Debug.Log("33333333");
         mainCamera = Camera.main;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Object.HasInputAuthority && Input.GetMouseButtonDown(1))
+        if (!HasInputAuthority) return;
+
+        if (Input.GetMouseButtonDown(1))
         {
-            Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity, groundLayer))
-            {
-                SetTargetPosition(hit.point);
-            }
+            TempCoroutine = StartCoroutine(SetPosition());
         }
-
+        
+        if (Input.GetMouseButtonUp(1))
+        {
+            StopCoroutine(TempCoroutine);
+        }
+        
         // 목표 지점으로 이동
         if (navMeshAgent.remainingDistance < 0.1f)
         {
@@ -47,11 +47,28 @@ public class NewPlayerMovement : NetworkBehaviour
 
     public void SetTargetPosition(Vector3 target)
     {
-        RPC_ServerSetTargetPosition(target);
+        //StartCoroutine(SetPosition(target));
+    }
+
+    IEnumerator SetPosition()
+    {
+        while (true)
+        {
+            Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, groundLayer))
+            {
+                RPC_ServerSetTargetPosition(hit.point);
+            }
+            
+            yield return new WaitForSeconds(0.1f);
+        }
+        
     }
     
     [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority, HostMode = RpcHostMode.SourceIsHostPlayer)]
-    public void RPC_ServerSetTargetPosition(Vector3 target, RpcInfo rpcInfo = default)
+    public void RPC_ServerSetTargetPosition(Vector3 target)
     {
         RPC_MultiSetTargetPosition(target);
     }
