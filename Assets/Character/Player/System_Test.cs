@@ -9,7 +9,6 @@ using UnityEngine.SceneManagement;
 public class System_Test : MonoBehaviour, INetworkRunnerCallbacks
 {
     [SerializeField] private NetworkPrefabRef _playerPrefab;
-    [SerializeField] private NetworkObject _playerObjectPrefab;
     private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
 
     private NetworkRunner _Runner;
@@ -74,7 +73,6 @@ public class System_Test : MonoBehaviour, INetworkRunnerCallbacks
              
             runner.SetPlayerObject(player, networkPlayerObject);
             
-            //runner.SetPlayerObject(player, networkPlayerObject);
             // Keep track of the player avatars for easy access
             _spawnedCharacters.Add(player, networkPlayerObject);
             

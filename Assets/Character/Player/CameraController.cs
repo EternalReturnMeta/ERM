@@ -47,43 +47,41 @@ public class CameraController : NetworkBehaviour
 
     private void CameraMoveToScreenEdge()
     {
-        // 마우스 현재 위치를 가져옵니다.
         Vector3 mousePosition = Input.mousePosition;
         
-        // 화면 너비와 높이 가져오기
+        // 화면 너비와 높이 
         float screenWidth = Screen.width;
         float screenHeight = Screen.height;
 
         // 카메라 이동 벡터 초기화
         Vector3 cameraMoveDirection = Vector3.zero;
 
-        // 마우스가 화면 왼쪽 경계에 있는지 확인
+        // 마우스가 화면 왼쪽 경계에 있는지 
         if (mousePosition.x <= ScreenEdgeThreshold)
         {
-            cameraMoveDirection.x = -2; // 왼쪽으로 이동
+            cameraMoveDirection.x = -1; 
         }
-        // 마우스가 화면 오른쪽 경계에 있는지 확인
+        // 마우스가 화면 오른쪽 경계에 있는지 
         else if (mousePosition.x >= screenWidth - ScreenEdgeThreshold)
         {
-            cameraMoveDirection.x = 2; // 오른쪽으로 이동
+            cameraMoveDirection.x = 1; 
         }
 
-        // 마우스가 화면 아래 경계에 있는지 확인
+        // 마우스가 화면 아래 경계에 있는지 
         if (mousePosition.y <= ScreenEdgeThreshold)
         {
-            cameraMoveDirection.z = -2; // 아래로 이동
+            cameraMoveDirection.z = -1; 
         }
-        // 마우스가 화면 위 경계에 있는지 확인
+        // 마우스가 화면 위 경계에 있는지 
         else if (mousePosition.y >= screenHeight - ScreenEdgeThreshold)
         {
-            cameraMoveDirection.z = 2; // 위로 이동
+            cameraMoveDirection.z = 1; 
         }
 
         // 카메라 이동
         if (cameraMoveDirection != Vector3.zero)
         {
             Vector3 moveVector = cameraMoveDirection.normalized * (CameraMoveSpeed * Time.deltaTime);
-            //_Camera.transform.Translate(moveVector, Space.World);
             _CinemachineCamera.transform.Translate(moveVector, Space.World);
         }
     }
