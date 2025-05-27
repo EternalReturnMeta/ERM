@@ -15,8 +15,7 @@ GameObject:
   - component: {fileID: 771094065078329187}
   - component: {fileID: 8519312922985508125}
   - component: {fileID: 6077731192486083573}
-  - component: {fileID: 3324649518296545766}
-  - component: {fileID: 2576002024238850381}
+  - component: {fileID: 3988989383132979580}
   m_Layer: 0
   m_Name: CharacterMesh
   m_TagString: Untagged
@@ -133,25 +132,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _animator: {fileID: 2807988997023748991}
---- !u!114 &3324649518296545766
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1526237333406210054}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 506319458, guid: e725a070cec140c4caffb81624c8c787, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Animator: {fileID: 2807988997023748991}
-  ApplyTiming: 2
-  SyncSettings: 79
-  StateHashes: 000000000b5de581165a22c69b3620e27554e897d593958aad2d9deb
-  TriggerHashes: 00000000ba15b117
-  TotalWords: 2
---- !u!114 &2576002024238850381
+--- !u!114 &3988989383132979580
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -224,8 +205,7 @@ MonoBehaviour:
   - {fileID: 6500628935853296315}
   - {fileID: 771094065078329187}
   - {fileID: 6077731192486083573}
-  - {fileID: 3324649518296545766}
-  - {fileID: 2576002024238850381}
+  - {fileID: 3988989383132979580}
   ForceRemoteRenderTimeframe: 0
 --- !u!1 &8668578687282004704
 GameObject:
