@@ -40,7 +40,7 @@ public class PlayerMovement : NetworkBehaviour
     {
         //Debug.Log("1111111111111");
         if (!HasStateAuthority) return;
-       
+        
         if (GetInput(out heroInput))
         {
             if(heroInput.Buttons.WasPressed(ButtonsPrevious, InputButton.RightClick))

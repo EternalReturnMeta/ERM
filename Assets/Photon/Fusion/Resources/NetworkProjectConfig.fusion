@@ -10,7 +10,7 @@
     },
     "EnqueueIncompleteSynchronousSpawns": false,
     "InvokeRenderInBatchMode": true,
-    "NetworkIdIsObjectName": false,
+    "NetworkIdIsObjectName": true,
     "HideNetworkObjectInactivityGuard": false,
     "AllowClientServerModesInWebGL": false,
     "ClientsRecordFrameAndPacketTimingTraces": false,
@@ -21,7 +21,7 @@
         "SimulationUpdateTimeMode": 0,
         "PlayerCount": 10,
         "TickRateSelection": {
-            "Client": 64,
+            "Client": 256,
             "ServerIndex": 0,
             "ClientSendIndex": 1,
             "ServerSendIndex": 1
@@ -29,7 +29,7 @@
         "MaxObjectDestroysSentPerPacket": 32
     },
     "Network": {
-        "ConnectionTimeout": 10.0,
+        "ConnectionTimeout": 180.0,
         "ConnectionShutdownTime": 1.0,
         "ReliableDataTransferModes": 3
     },

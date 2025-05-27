@@ -19,11 +19,13 @@ public class System_Test : MonoBehaviour, INetworkRunnerCallbacks
     private bool resetInput;
     
     private bool _mouseButton0;
+
+#if UNITY_SERVER
     
-    #if UNITY_SERVER
-    
-    async void StartGame()
+    private async void Start()
     {
+        Debug.unityLogger.logEnabled = false;
+
         // // Create the Fusion runner and let it know that we will be providing user input
         _Runner = gameObject.AddComponent<NetworkRunner>();
         _Runner.ProvideInput = true;
@@ -80,7 +82,7 @@ public class System_Test : MonoBehaviour, INetworkRunnerCallbacks
         }
 
         // Start or join (depends on gamemode) a session with a specific name
-        await _Runner.StartGame(new StartGameArgs()
+        var result = await _Runner.StartGame(new StartGameArgs()
         {
             GameMode = mode,
             SessionName = "TestRoom",
@@ -88,6 +90,10 @@ public class System_Test : MonoBehaviour, INetworkRunnerCallbacks
             SceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>()
         });
 
+        if (!result.Ok)
+        {
+            Debug.LogError("서버 접속 실패: " + result.ShutdownReason);
+        }
     }
 
    #endif
@@ -119,8 +125,9 @@ public class System_Test : MonoBehaviour, INetworkRunnerCallbacks
     
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
-        if (runner.IsServer) return;
-        
+#if UNITY_SERVER
+        return;
+#endif
         if (resetInput)
         {
             resetInput = false;
@@ -152,7 +159,6 @@ public class System_Test : MonoBehaviour, INetworkRunnerCallbacks
             if (Physics.Raycast(ray, out var hit, Mathf.Infinity, LayerMask.GetMask("Ground")))
             {
                 _heroInput.HitPosition = hit.point;
-                Debug.Log($"Hit: {_heroInput.HitPosition}");
             }
         }
         
@@ -161,7 +167,6 @@ public class System_Test : MonoBehaviour, INetworkRunnerCallbacks
         
         input.Set(_heroInput);
         resetInput = true;
-        
     }
     
     public void OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player)
