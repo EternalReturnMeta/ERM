@@ -6,18 +6,15 @@ public class PlayerAnimation : NetworkBehaviour
 {
     
     [SerializeField] private Animator animator;
-    [SerializeField] private NetworkMecanimAnimator mecanimAnimator;
     private PlayerMovement movement;
     
+    [Networked] public int MoveVelocity {get; set;}
     void Start()
     {
         movement = GetComponent<PlayerMovement>();
-        mecanimAnimator = GetComponent<NetworkMecanimAnimator>();
-    }
+        movement.OnMove += OnChangeMoveVelocity;
 
-    public override void FixedUpdateNetwork()
-    {
-       
+        MoveVelocity = 0;
     }
 
     private void Update()
@@ -32,8 +29,13 @@ public class PlayerAnimation : NetworkBehaviour
         {
             if (movement)
             {
-                animator.SetFloat("MoveSpeed", movement.navMeshAgent.velocity.magnitude);
+                animator.SetFloat("MoveSpeed", MoveVelocity);
             }
         }
+    }
+
+    private void OnChangeMoveVelocity(int v)
+    {
+        MoveVelocity = v;
     }
 }

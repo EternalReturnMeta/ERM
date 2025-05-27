@@ -14,9 +14,12 @@ public class PlayerMovement : NetworkBehaviour
 
     private HeroInput heroInput;
     
+    private PlayerAnimation _PlayerAnimation;
+    public event Action<int> OnMove;
     private void Awake()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
+        _PlayerAnimation = GetComponent<PlayerAnimation>();
     }
     
     private void Start()
@@ -55,8 +58,6 @@ public class PlayerMovement : NetworkBehaviour
 
     public override void Render()
     {
-        if (!HasInputAuthority) return;
-
         if (HasStateAuthority)
         {
             if (navMeshAgent)
@@ -64,6 +65,7 @@ public class PlayerMovement : NetworkBehaviour
                 if (navMeshAgent.remainingDistance < 0.1f)
                 {
                     navMeshAgent.isStopped = true;
+                    OnMove?.Invoke(0);
                 }
             }
         }
@@ -72,9 +74,14 @@ public class PlayerMovement : NetworkBehaviour
     private void ToggleProcess(bool isOn)
     {
         if (isOn)
+        {
             StartCoroutine(SetPositionProcess());
+            OnMove?.Invoke(1);
+        }
         else
+        {
             StopAllCoroutines();
+        }
     }
 
     private IEnumerator SetPositionProcess()
@@ -87,4 +94,5 @@ public class PlayerMovement : NetworkBehaviour
             yield return new WaitForSeconds(0.15f);
         }
     }
+    
 }
