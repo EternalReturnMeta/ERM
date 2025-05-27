@@ -6,20 +6,20 @@ using UnityEngine.AI;
 
 public class PlayerMovement : NetworkBehaviour
 {
-    private Camera mainCamera; // 카메라 참조
+    private Camera mainCamera;
     [SerializeField] private LayerMask groundLayer; // 바닥 레이어
     [HideInInspector] public NavMeshAgent navMeshAgent;
     
     [Networked] public NetworkButtons ButtonsPrevious { get; set; }
 
     private HeroInput heroInput;
-    
-    private PlayerAnimation _PlayerAnimation;
+    private int moveCheck;
     public event Action<int> OnMove;
+    
     private void Awake()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
-        _PlayerAnimation = GetComponent<PlayerAnimation>();
+        moveCheck = 0;
     }
     
     private void Start()
@@ -38,13 +38,13 @@ public class PlayerMovement : NetworkBehaviour
 
     public override void FixedUpdateNetwork() 
     {
+        //Debug.Log("1111111111111");
         if (!HasStateAuthority) return;
        
         if (GetInput(out heroInput))
         {
             if(heroInput.Buttons.WasPressed(ButtonsPrevious, InputButton.RightClick))
             {
-                Debug.Log($"RightClick", gameObject);
                 ToggleProcess(true);
             }
             if (heroInput.Buttons.WasReleased(ButtonsPrevious, InputButton.RightClick))
@@ -64,8 +64,11 @@ public class PlayerMovement : NetworkBehaviour
             {
                 if (navMeshAgent.remainingDistance < 0.1f)
                 {
-                    navMeshAgent.isStopped = true;
-                    OnMove?.Invoke(0);
+                    if (moveCheck == 1)
+                    {
+                        OnMove?.Invoke(0);
+                        moveCheck = 0;
+                    }
                 }
             }
         }
@@ -76,11 +79,11 @@ public class PlayerMovement : NetworkBehaviour
         if (isOn)
         {
             StartCoroutine(SetPositionProcess());
-            OnMove?.Invoke(1);
         }
         else
         {
             StopAllCoroutines();
+            moveCheck = 1;
         }
     }
 
@@ -88,8 +91,10 @@ public class PlayerMovement : NetworkBehaviour
     {
         while (true)
         {
-            navMeshAgent.SetDestination(heroInput.HitPosition);
+            OnMove?.Invoke(1);
+            
             navMeshAgent.isStopped = false;
+            navMeshAgent.SetDestination(heroInput.HitPosition);
             
             yield return new WaitForSeconds(0.15f);
         }

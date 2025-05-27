@@ -20,6 +20,35 @@ public class System_Test : MonoBehaviour, INetworkRunnerCallbacks
     
     private bool _mouseButton0;
     
+    #if UNITY_SERVER
+    
+    async void StartGame()
+    {
+        // // Create the Fusion runner and let it know that we will be providing user input
+        _Runner = gameObject.AddComponent<NetworkRunner>();
+        _Runner.ProvideInput = true;
+        gameObject.AddComponent<RunnerSimulatePhysics3D>();
+        
+        
+        // Create the NetworkSceneInfo from the current scene
+        var scene = SceneRef.FromIndex(SceneManager.GetActiveScene().buildIndex);
+        var sceneInfo = new NetworkSceneInfo();
+        if (scene.IsValid) {
+            sceneInfo.AddSceneRef(scene, LoadSceneMode.Additive);
+        }
+
+        // Start or join (depends on gamemode) a session with a specific name
+        await _Runner.StartGame(new StartGameArgs()
+        {
+            GameMode = GameMode.Server,
+            SessionName = "TestRoom",
+            SceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>()
+        });
+
+    }
+    
+    #else
+    
     private void OnGUI()
     {
         if (_Runner == null)
@@ -61,7 +90,7 @@ public class System_Test : MonoBehaviour, INetworkRunnerCallbacks
 
     }
 
-   
+   #endif
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
@@ -90,6 +119,8 @@ public class System_Test : MonoBehaviour, INetworkRunnerCallbacks
     
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
+        if (runner.IsServer) return;
+        
         if (resetInput)
         {
             resetInput = false;
@@ -115,16 +146,18 @@ public class System_Test : MonoBehaviour, INetworkRunnerCallbacks
             buttons.Set(InputButton.SkillR, keyboard.rKey.isPressed);
         }
         
-        _heroInput.Buttons = new NetworkButtons(_heroInput.Buttons.Bits | buttons.Bits);
-
         if (mouse.rightButton.isPressed)
         {
             var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out var hit, Mathf.Infinity, LayerMask.GetMask("Ground")))
             {
                 _heroInput.HitPosition = hit.point;
+                Debug.Log($"Hit: {_heroInput.HitPosition}");
             }
         }
+        
+        _heroInput.Buttons = new NetworkButtons(_heroInput.Buttons.Bits | buttons.Bits);
+
         
         input.Set(_heroInput);
         resetInput = true;
