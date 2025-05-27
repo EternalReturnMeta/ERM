@@ -4,6 +4,7 @@ using Fusion;
 using Fusion.Addons.Physics;
 using Fusion.Sockets;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public class System_Test : MonoBehaviour, INetworkRunnerCallbacks
@@ -13,6 +14,11 @@ public class System_Test : MonoBehaviour, INetworkRunnerCallbacks
 
     private NetworkRunner _Runner;
     
+    private HeroInput _heroInput;
+    
+    private bool resetInput;
+    
+    private bool _mouseButton0;
     
     private void OnGUI()
     {
@@ -55,13 +61,7 @@ public class System_Test : MonoBehaviour, INetworkRunnerCallbacks
 
     }
 
-    public void OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player)
-    {
-    }
-
-    public void OnObjectEnterAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player)
-    {
-    }
+   
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
@@ -69,7 +69,7 @@ public class System_Test : MonoBehaviour, INetworkRunnerCallbacks
         {
             // Create a unique position for the player
             Vector3 spawnPosition = new Vector3((player.RawEncoded % runner.Config.Simulation.PlayerCount) * 3, 1, 0);
-            NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, spawnPosition, Quaternion.identity, player);
+            NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, Vector3.zero, Quaternion.identity, player);
              
             runner.SetPlayerObject(player, networkPlayerObject);
             
@@ -87,7 +87,58 @@ public class System_Test : MonoBehaviour, INetworkRunnerCallbacks
             _spawnedCharacters.Remove(player);
         }
     }
+    
+    public void OnInput(NetworkRunner runner, NetworkInput input)
+    {
+        if (resetInput)
+        {
+            resetInput = false;
+            _heroInput = default;
+        }
 
+        Keyboard keyboard = Keyboard.current;
+        
+        NetworkButtons buttons = default;
+        
+        Mouse mouse = Mouse.current;
+        if (mouse != null)
+        {
+            buttons.Set(InputButton.LeftClick, mouse.leftButton.isPressed);
+            buttons.Set(InputButton.RightClick, mouse.rightButton.isPressed);
+        }
+        
+        if (keyboard != null)
+        {
+            buttons.Set(InputButton.SkillQ, keyboard.qKey.isPressed);
+            buttons.Set(InputButton.SkillW, keyboard.wKey.isPressed);
+            buttons.Set(InputButton.SkillE, keyboard.eKey.isPressed);
+            buttons.Set(InputButton.SkillR, keyboard.rKey.isPressed);
+        }
+        
+        _heroInput.Buttons = new NetworkButtons(_heroInput.Buttons.Bits | buttons.Bits);
+
+        if (mouse.rightButton.isPressed)
+        {
+            var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out var hit, Mathf.Infinity, LayerMask.GetMask("Ground")))
+            {
+                _heroInput.HitPosition = hit.point;
+            }
+        }
+        
+        input.Set(_heroInput);
+        resetInput = true;
+        
+    }
+    
+    public void OnObjectExitAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player)
+    {
+    }
+
+    public void OnObjectEnterAOI(NetworkRunner runner, NetworkObject obj, PlayerRef player)
+    {
+    }
+    
     public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
     {
     }
@@ -112,39 +163,22 @@ public class System_Test : MonoBehaviour, INetworkRunnerCallbacks
     {
     }
 
-    public void OnReliableDataProgress(NetworkRunner runner, PlayerRef player, ReliableKey key, float progress)
-    {
-    }
+    public void OnReliableDataProgress(NetworkRunner runner, PlayerRef player, ReliableKey key, float progress) { }
+    
 
-    public void OnInput(NetworkRunner runner, NetworkInput input)
-    {
-    }
+    public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
 
-    public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input)
-    {
-    }
+    public void OnConnectedToServer(NetworkRunner runner) { }
 
-    public void OnConnectedToServer(NetworkRunner runner)
-    {
-    }
+    public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList) { }
 
-    public void OnSessionListUpdated(NetworkRunner runner, List<SessionInfo> sessionList)
-    {
-    }
+    public void OnCustomAuthenticationResponse(NetworkRunner runner, Dictionary<string, object> data) { }
 
-    public void OnCustomAuthenticationResponse(NetworkRunner runner, Dictionary<string, object> data)
-    {
-    }
+    public void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken) { }
 
-    public void OnHostMigration(NetworkRunner runner, HostMigrationToken hostMigrationToken)
-    {
-    }
+    public void OnSceneLoadDone(NetworkRunner runner) { }
 
-    public void OnSceneLoadDone(NetworkRunner runner)
-    {
-    }
+    public void OnSceneLoadStart(NetworkRunner runner) { }
 
-    public void OnSceneLoadStart(NetworkRunner runner)
-    {
-    }
+    
 }
