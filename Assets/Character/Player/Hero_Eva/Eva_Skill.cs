@@ -6,51 +6,72 @@ public class Eva_Skill : PlayerBase
 {
      [SerializeField] private Animator _animator;
      
+     private HeroInput heroInput;
+     [Networked] public NetworkButtons ButtonsPrevious { get; set; }
 
-    private void Update()
+     [SerializeField] private GameObject _skillQ;
+    [Networked] private int ButtonsPreviousQ { get; set; }
+    private Quaternion lookQuaternion{ get; set;}
+    
+    private Vector3 _skillQDir {get; set;}
+    private void Start()
     {
+        ButtonsPreviousQ = 0;
+    }
+    public override void FixedUpdateNetwork()
+    {
+        if (!HasStateAuthority) return;
+      
+        if (GetInput(out heroInput))
+        {
+            if(heroInput.Buttons.WasPressed(ButtonsPrevious, InputButton.SkillQ))
+            {
+                if (ButtonsPreviousQ == 0)
+                {
+                    ButtonsPreviousQ = 1;  
+                    Debug.Log($"QQQQQQQQQQ", gameObject);
+                    RPC_Multi_Skill_Q();
+                    
+                    // var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                    // if (Physics.Raycast(ray, out var hit, Mathf.Infinity, LayerMask.GetMask("Ground")))
+                    // {
+                    //     _skillQDir = hit.point - gameObject.transform.position;
+                    //    
+                    //     //_skillQPosition.Normalize();
+                    // }
+                    _skillQDir = heroInput.HitPosition - gameObject.transform.position;
+                    _skillQDir = new Vector3(_skillQDir.x, 0, _skillQDir.z);
+                    //lookQuaternion = Quaternion.LookRotation(_skillQDir);
+                    Debug.Log($"_skillQPosition : {_skillQDir}", gameObject);
+                    Runner.Spawn(_skillQ, gameObject.transform.position, Quaternion.LookRotation(_skillQDir));
+                }
+            }
+            if (heroInput.Buttons.WasReleased(ButtonsPrevious, InputButton.SkillQ))
+            {
+                ButtonsPreviousQ = 0;
+            }
+        }
         
-        
+        ButtonsPrevious = heroInput.Buttons;
     }
 
     public override void Render()
     {
-        if( !HasInputAuthority ) return;
         
-        if (Input.GetKeyDown(KeyCode.Q))
-        { 
-            //Skill_Q();
-            //QQ();
-        }
-    }
-
-    public void QQ()
-    {
-        _animator.SetTrigger("tSkill01");
-
-    }
-    protected override void Skill_Q()
-    {
-        Debug.Log("Q");
-        RPC_Server_Skill_Q();
-    }
-
-    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority, HostMode = RpcHostMode.SourceIsHostPlayer)]
-    private void RPC_Server_Skill_Q()
-    {
-        if (Runner.IsServer)
-        {
-            Debug.Log("Server");
-        }
-        RPC_Multi_Skill_Q();
     }
     
+   
     [Rpc(RpcSources.StateAuthority, RpcTargets.All, HostMode = RpcHostMode.SourceIsServer)]
     private void RPC_Multi_Skill_Q()
     {
+        
         _animator.SetTrigger("tSkill01");
     }
     
+    protected override void Skill_Q()
+    {
+        
+    }
     protected override void Skill_W()
     {
         

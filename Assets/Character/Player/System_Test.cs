@@ -161,6 +161,15 @@ public class System_Test : MonoBehaviour, INetworkRunnerCallbacks
                 _heroInput.HitPosition = hit.point;
             }
         }
+
+        if (keyboard.qKey.isPressed)
+        {
+            var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out var hit, Mathf.Infinity, LayerMask.GetMask("Ground")))
+            {
+                _heroInput.HitPosition = hit.point;
+            }
+        }
         
         _heroInput.Buttons = new NetworkButtons(_heroInput.Buttons.Bits | buttons.Bits);
 
