@@ -2,7 +2,7 @@ using System;
 using Fusion;
 using UnityEngine;
 
-public class Eva_Skill : HeroBase
+public class Eva_Skill : HeroSkill
 {
      [SerializeField] private Animator _animator;
      
@@ -13,10 +13,13 @@ public class Eva_Skill : HeroBase
     [Networked] private int ButtonsPreviousQ { get; set; }
     
     private Vector3 _skillQDir {get; set;}
-    private void Start()
+    
+
+    public override void Spawned()
     {
         ButtonsPreviousQ = 0;
     }
+
     public override void FixedUpdateNetwork()
     {
         if (!HasStateAuthority) return;
@@ -39,13 +42,6 @@ public class Eva_Skill : HeroBase
         
         ButtonsPrevious = heroInput.Buttons;
     }
-
-    public override void Render()
-    {
-        
-    }
-    
-   
     
     protected override void Skill_Q()
     {

@@ -9,14 +9,15 @@ public class HeroAnimation : NetworkBehaviour
     private HeroMovement movement;
     
     [Networked] private int MoveVelocity {get; set;}
-    void Start()
+   
+    public override void Spawned()
     {
         movement = GetComponent<HeroMovement>();
         movement.OnMove += OnChangeMoveVelocity;
 
         MoveVelocity = 0;
     }
-    
+
     public override void Render()
     {
         if (animator)

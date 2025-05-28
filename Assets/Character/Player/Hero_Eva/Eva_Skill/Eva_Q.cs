@@ -7,6 +7,7 @@ public class Eva_Q : NetworkBehaviour
     [Networked] private TickTimer life { get; set; }
 
     private PlayerRef owner;
+    
     public void Init(PlayerRef player)
     {
         owner = player;
