@@ -2,7 +2,7 @@ using System;
 using Fusion;
 using UnityEngine;
 
-public class Eva_Skill : PlayerBase
+public class Eva_Skill : HeroBase
 {
      [SerializeField] private Animator _animator;
      
@@ -11,7 +11,6 @@ public class Eva_Skill : PlayerBase
 
      [SerializeField] private GameObject _skillQ;
     [Networked] private int ButtonsPreviousQ { get; set; }
-    private Quaternion lookQuaternion{ get; set;}
     
     private Vector3 _skillQDir {get; set;}
     private void Start()
@@ -29,21 +28,7 @@ public class Eva_Skill : PlayerBase
                 if (ButtonsPreviousQ == 0)
                 {
                     ButtonsPreviousQ = 1;  
-                    Debug.Log($"QQQQQQQQQQ", gameObject);
-                    RPC_Multi_Skill_Q();
-                    
-                    // var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                    // if (Physics.Raycast(ray, out var hit, Mathf.Infinity, LayerMask.GetMask("Ground")))
-                    // {
-                    //     _skillQDir = hit.point - gameObject.transform.position;
-                    //    
-                    //     //_skillQPosition.Normalize();
-                    // }
-                    _skillQDir = heroInput.HitPosition - gameObject.transform.position;
-                    _skillQDir = new Vector3(_skillQDir.x, 0, _skillQDir.z);
-                    //lookQuaternion = Quaternion.LookRotation(_skillQDir);
-                    Debug.Log($"_skillQPosition : {_skillQDir}", gameObject);
-                    Runner.Spawn(_skillQ, gameObject.transform.position, Quaternion.LookRotation(_skillQDir));
+                    Skill_Q();
                 }
             }
             if (heroInput.Buttons.WasReleased(ButtonsPrevious, InputButton.SkillQ))
@@ -61,17 +46,24 @@ public class Eva_Skill : PlayerBase
     }
     
    
-    [Rpc(RpcSources.StateAuthority, RpcTargets.All, HostMode = RpcHostMode.SourceIsServer)]
-    private void RPC_Multi_Skill_Q()
-    {
-        
-        _animator.SetTrigger("tSkill01");
-    }
     
     protected override void Skill_Q()
     {
+        RPC_Multi_Skill_Q();
         
+        _skillQDir = heroInput.HitPosition - gameObject.transform.position;
+        _skillQDir = new Vector3(_skillQDir.x, 0, _skillQDir.z);
+        
+        var no = Runner.Spawn(_skillQ, gameObject.transform.position, Quaternion.LookRotation(_skillQDir));
+        no.GetComponent<Eva_Q>().Init(heroInput.Owner);
     }
+    
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All, HostMode = RpcHostMode.SourceIsServer)]
+    private void RPC_Multi_Skill_Q()
+    {
+        _animator.SetTrigger("tSkill01");
+    }
+    
     protected override void Skill_W()
     {
         

@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class PlayerCameraPoint : MonoBehaviour
+public class HeroCameraPoint : MonoBehaviour
 {    
     [SerializeField] private Transform player;
     

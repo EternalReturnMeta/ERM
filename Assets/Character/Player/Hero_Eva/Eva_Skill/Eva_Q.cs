@@ -1,11 +1,17 @@
+using System;
 using Fusion;
 using UnityEngine;
 
 public class Eva_Q : NetworkBehaviour
 {
     [Networked] private TickTimer life { get; set; }
-    
 
+    private PlayerRef owner;
+    public void Init(PlayerRef player)
+    {
+        owner = player;
+        Debug.Log($"구체의 주인 : {owner}");
+    }
     public override void Spawned()
     {
         life = TickTimer.CreateFromSeconds(Runner, 5.0f);
@@ -16,7 +22,27 @@ public class Eva_Q : NetworkBehaviour
         if(life.Expired(Runner))
             Runner.Despawn(Object);
         else
-            transform.position += 15 * transform.forward * Runner.DeltaTime;
+            transform.position += 30 * transform.forward * Runner.DeltaTime;
     }
-   
+    
+    private void OnTriggerEnter(Collider other)
+    {
+        // 주인이 맞았다면
+        if (other.GetComponentInParent<NetworkObject>().InputAuthority == owner)
+        {
+            Debug.Log($"구체의 오너 : {owner} || 맞은넘 : {other.GetComponentInParent<NetworkObject>().InputAuthority} ==> 내꺼니까 무시할게");
+            
+            return;
+        }
+        
+        Debug.Log($"구체의 오너 : {owner} || 맞은넘 : {other.GetComponentInParent<NetworkObject>().InputAuthority} ==> 데미지 줄게");
+     
+        IDamageable damageable = other.GetComponentInParent<IDamageable>();
+        if (damageable != null)
+        {
+            damageable.TakeDamage(10);
+        }
+        
+    }
+
 }

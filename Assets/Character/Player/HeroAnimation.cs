@@ -2,16 +2,16 @@ using System;
 using Fusion;
 using UnityEngine;
 
-public class PlayerAnimation : NetworkBehaviour
+public class HeroAnimation : NetworkBehaviour
 {
     
     [SerializeField] private Animator animator;
-    private PlayerMovement movement;
+    private HeroMovement movement;
     
     [Networked] private int MoveVelocity {get; set;}
     void Start()
     {
-        movement = GetComponent<PlayerMovement>();
+        movement = GetComponent<HeroMovement>();
         movement.OnMove += OnChangeMoveVelocity;
 
         MoveVelocity = 0;

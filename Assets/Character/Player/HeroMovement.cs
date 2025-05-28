@@ -4,7 +4,7 @@ using Fusion;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class PlayerMovement : NetworkBehaviour
+public class HeroMovement : NetworkBehaviour
 {
     private Camera mainCamera;
     [SerializeField] private LayerMask groundLayer; // 바닥 레이어

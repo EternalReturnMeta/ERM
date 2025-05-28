@@ -169,6 +169,8 @@ public class System_Test : MonoBehaviour, INetworkRunnerCallbacks
             {
                 _heroInput.HitPosition = hit.point;
             }
+            
+            _heroInput.Owner = _Runner.LocalPlayer;
         }
         
         _heroInput.Buttons = new NetworkButtons(_heroInput.Buttons.Bits | buttons.Bits);

@@ -1,7 +1,7 @@
 using Fusion;
 using UnityEngine;
 
-public abstract class PlayerBase : NetworkBehaviour
+public abstract class HeroBase : NetworkBehaviour
 {
     protected abstract void Skill_Q();
 
