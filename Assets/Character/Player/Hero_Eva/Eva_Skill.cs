@@ -47,7 +47,7 @@ public class Eva_Skill : HeroSkill
     {
         RPC_Multi_Skill_Q();
         
-        _skillQDir = heroInput.HitPosition - gameObject.transform.position;
+        _skillQDir = heroInput.HitPosition_Skill - gameObject.transform.position;
         _skillQDir = new Vector3(_skillQDir.x, 0, _skillQDir.z);
         
         var no = Runner.Spawn(_skillQ, gameObject.transform.position, Quaternion.LookRotation(_skillQDir));

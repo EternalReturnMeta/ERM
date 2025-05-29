@@ -28,6 +28,7 @@ public class Eva_Q : NetworkBehaviour
     
     private void OnTriggerEnter(Collider other)
     {
+        if(other.GetComponentInParent<NetworkObject>() == null) return;
         // 주인이 맞았다면
         if (other.GetComponentInParent<NetworkObject>().InputAuthority == owner)
         {

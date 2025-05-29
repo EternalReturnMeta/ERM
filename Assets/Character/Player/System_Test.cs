@@ -158,7 +158,7 @@ public class System_Test : MonoBehaviour, INetworkRunnerCallbacks
             var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out var hit, Mathf.Infinity, LayerMask.GetMask("Ground")))
             {
-                _heroInput.HitPosition = hit.point;
+                _heroInput.HitPosition_RightClick = hit.point;
             }
         }
 
@@ -167,7 +167,7 @@ public class System_Test : MonoBehaviour, INetworkRunnerCallbacks
             var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out var hit, Mathf.Infinity, LayerMask.GetMask("Ground")))
             {
-                _heroInput.HitPosition = hit.point;
+                _heroInput.HitPosition_Skill = hit.point;
             }
             
             _heroInput.Owner = _Runner.LocalPlayer;
