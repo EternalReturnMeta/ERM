@@ -268,7 +268,7 @@ GameObject:
   - component: {fileID: 8996353228479947911}
   - component: {fileID: 1529212766683141585}
   m_Layer: 0
-  m_Name: Hero_Eva22222
+  m_Name: Hero_Eva
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
