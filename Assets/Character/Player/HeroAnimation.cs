@@ -13,7 +13,7 @@ public class HeroAnimation : NetworkBehaviour
     public override void Spawned()
     {
         movement = GetComponent<HeroMovement>();
-        movement.OnMove += OnChangeMoveVelocity;
+        movement.OnMoveVelocityChanged += OnChangedVelocity;
 
         MoveVelocity = 0;
     }
@@ -29,7 +29,7 @@ public class HeroAnimation : NetworkBehaviour
         }
     }
 
-    private void OnChangeMoveVelocity(int v)
+    private void OnChangedVelocity(int v)
     {
         MoveVelocity = v;
     }

@@ -14,7 +14,8 @@ public enum InputButton
 public struct HeroInput : INetworkInput
 {
     public NetworkButtons Buttons;
-    public Vector3 HitPosition;
+    public Vector3 HitPosition_RightClick;
+    public Vector3 HitPosition_Skill;
 
     public PlayerRef Owner;
      
