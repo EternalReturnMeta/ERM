@@ -1,20 +1,18 @@
 using System;
+using System.Collections;
 using Fusion;
 using UnityEngine;
 
 public class Eva_Skill : HeroSkill
 {
-     [SerializeField] private Animator _animator;
-     
-     private HeroInput heroInput;
-     [Networked] public NetworkButtons ButtonsPrevious { get; set; }
-
-     [SerializeField] private GameObject _skillQ;
+    private HeroInput heroInput;
+    [Networked] public NetworkButtons ButtonsPrevious { get; set; }
     [Networked] private int ButtonsPreviousQ { get; set; }
+
+    [SerializeField] private GameObject _skillQ;
     
     private Vector3 _skillQDir {get; set;}
     
-
     public override void Spawned()
     {
         ButtonsPreviousQ = 0;
@@ -45,20 +43,28 @@ public class Eva_Skill : HeroSkill
     
     protected override void Skill_Q()
     {
-        RPC_Multi_Skill_Q();
+        GetComponent<HeroAnimation>().RPC_Multi_Skill_Q();
         
         _skillQDir = heroInput.HitPosition_Skill - gameObject.transform.position;
         _skillQDir = new Vector3(_skillQDir.x, 0, _skillQDir.z);
         
         var no = Runner.Spawn(_skillQ, gameObject.transform.position, Quaternion.LookRotation(_skillQDir));
+       
         no.GetComponent<Eva_Q>().Init(heroInput.Owner);
+        //Runner.StartCoroutine(SpawnCourutine(heroInput));
     }
     
-    [Rpc(RpcSources.StateAuthority, RpcTargets.All, HostMode = RpcHostMode.SourceIsServer)]
-    private void RPC_Multi_Skill_Q()
-    {
-        _animator.SetTrigger("tSkill01");
-    }
+    // IEnumerator SpawnCourutine(HeroInput _heroInput)
+    // {
+    //     yield return new WaitForSeconds(0.5f);
+    //     
+    //     _skillQDir = _heroInput.HitPosition_Skill - gameObject.transform.position;
+    //     _skillQDir = new Vector3(_skillQDir.x, 0, _skillQDir.z);
+    //     
+    //     var no = Runner.Spawn(_skillQ, gameObject.transform.position, Quaternion.LookRotation(_skillQDir));
+    //    
+    //     no.GetComponent<Eva_Q>().Init(_heroInput.Owner);
+    // }
     
     protected override void Skill_W()
     {

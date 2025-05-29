@@ -85,7 +85,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af00136be7c8396499cb3108f7e71a4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _Camera: {fileID: 0}
   _CinemachineCamera: {fileID: 0}
   CameraPoint: {fileID: 3645101337960297348}
   CameraMoveSpeed: 5
@@ -136,7 +135,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 204b506a2790b8947877266b08f78158, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _animator: {fileID: 2807988997023748991}
   _skillQ: {fileID: 2831071643475020391, guid: 685368c3db50d1f41b4f81de010746c8, type: 3}
 --- !u!114 &3324649518296545766
 MonoBehaviour:
@@ -362,7 +360,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 333905070028042640}
-  FixedYPosition: 15
+  FixedYPosition: 9
   DistanceOffset: {x: 0, y: 0, z: 0}
 --- !u!1001 &2856850733423844917
 PrefabInstance:
