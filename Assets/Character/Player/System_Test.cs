@@ -127,10 +127,9 @@ public class System_Test : MonoBehaviour, INetworkRunnerCallbacks
 #if UNITY_SERVER
         return;
 #endif
-        if (_spawnedCharacters.TryGetValue(runner.LocalPlayer, out NetworkObject networkObject))
+        if (runner.TryGetPlayerObject(runner.LocalPlayer, out NetworkObject networkObject))
         {
-            if (_spawnedCharacters[runner.LocalPlayer].gameObject.
-                    GetComponentInChildren<HeroState>().GetCurrentHealth() <= 0f)
+            if (networkObject.GetComponentInChildren<HeroState>().GetCurrHealth() <= 0f)
             {
                 return;
             }

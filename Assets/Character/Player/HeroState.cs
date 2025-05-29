@@ -11,16 +11,16 @@ public class HeroState : NetworkBehaviour, IDamageable
     
     [Networked] [field:SerializeField]
     private float MaxHealth {get; set;}
-
-    public float GetCurrentHealth()
-    {
-        return CurrHealth;
-    }
     
     public override void Spawned()
     {
         MaxHealth = 100;
         CurrHealth = MaxHealth;
+    }
+
+    public float GetCurrHealth()
+    {
+        return CurrHealth;
     }
 
     public void TakeDamage(float damage)
