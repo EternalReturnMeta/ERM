@@ -1,5 +1,7 @@
 using Fusion;
+using Fusion.Addons.KCC;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.UI;
 
 public class HeroState : NetworkBehaviour, IDamageable
@@ -9,6 +11,11 @@ public class HeroState : NetworkBehaviour, IDamageable
     
     [Networked] [field:SerializeField]
     private float MaxHealth {get; set;}
+
+    public float GetCurrentHealth()
+    {
+        return CurrHealth;
+    }
     
     public override void Spawned()
     {
@@ -23,12 +30,10 @@ public class HeroState : NetworkBehaviour, IDamageable
 
         if (CurrHealth <= 0)
         {
-            DeadProcess();
+            var navMeshAgent = GetComponent<NavMeshAgent>();
+            navMeshAgent.isStopped = true;
+            
+            GetComponent<HeroAnimation>().RPC_DeadProcess();
         }
-    }
-
-    private void DeadProcess()
-    {
-        Debug.Log($"{gameObject.GetComponentInParent<NetworkObject>().InputAuthority} : Dead");
     }
 }

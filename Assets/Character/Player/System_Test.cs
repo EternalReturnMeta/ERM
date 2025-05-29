@@ -10,6 +10,7 @@ using UnityEngine.SceneManagement;
 public class System_Test : MonoBehaviour, INetworkRunnerCallbacks
 {
     [SerializeField] private NetworkPrefabRef _playerPrefab;
+
     private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
 
     private NetworkRunner _Runner;
@@ -103,14 +104,12 @@ public class System_Test : MonoBehaviour, INetworkRunnerCallbacks
         if (runner.IsServer)
         {
             // Create a unique position for the player
-            Vector3 spawnPosition = new Vector3((player.RawEncoded % runner.Config.Simulation.PlayerCount) * 3, 1, 0);
             NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, Vector3.zero, Quaternion.identity, player);
              
             runner.SetPlayerObject(player, networkPlayerObject);
             
             // Keep track of the player avatars for easy access
             _spawnedCharacters.Add(player, networkPlayerObject);
-            
         }
     }
 
@@ -128,6 +127,15 @@ public class System_Test : MonoBehaviour, INetworkRunnerCallbacks
 #if UNITY_SERVER
         return;
 #endif
+        if (_spawnedCharacters.TryGetValue(runner.LocalPlayer, out NetworkObject networkObject))
+        {
+            if (_spawnedCharacters[runner.LocalPlayer].gameObject.
+                    GetComponentInChildren<HeroState>().GetCurrentHealth() <= 0f)
+            {
+                return;
+            }
+        }
+        
         if (resetInput)
         {
             resetInput = false;

@@ -33,4 +33,14 @@ public class HeroAnimation : NetworkBehaviour
     {
         MoveVelocity = v;
     }
+    
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All, HostMode = RpcHostMode.SourceIsServer)]
+    public void RPC_DeadProcess()
+    {
+        if (animator)
+        {
+            MoveVelocity = 0;
+            animator.SetTrigger("IsDead");
+        }
+    }
 }

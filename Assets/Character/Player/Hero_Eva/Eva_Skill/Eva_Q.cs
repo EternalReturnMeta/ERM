@@ -39,7 +39,7 @@ public class Eva_Q : NetworkBehaviour
         Debug.Log($"구체의 오너 : {owner} || 맞은넘 : {other.GetComponentInParent<NetworkObject>().InputAuthority} ==> 데미지 줄게");
      
         IDamageable damageable = other.GetComponentInParent<IDamageable>();
-        if (damageable != null)
+        if (damageable != null && other.GetComponent<HeroState>().GetCurrentHealth() > 0f)
         {
             damageable.TakeDamage(10);
         }
