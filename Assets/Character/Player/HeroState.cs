@@ -33,7 +33,7 @@ public class HeroState : NetworkBehaviour, IDamageable
             var navMeshAgent = GetComponent<NavMeshAgent>();
             navMeshAgent.isStopped = true;
             
-            GetComponent<HeroAnimation>().RPC_DeadProcess();
+            GetComponent<Eva_AnimationController>().RPC_DeadProcess();
         }
     }
 }

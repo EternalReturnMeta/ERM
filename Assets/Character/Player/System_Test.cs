@@ -169,16 +169,23 @@ public class System_Test : MonoBehaviour, INetworkRunnerCallbacks
             }
         }
 
-        if (keyboard.qKey.isPressed)
+        if (keyboard.qKey.isPressed || keyboard.wKey.isPressed || keyboard.eKey.isPressed || keyboard.rKey.isPressed)
         {
             var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out var hit, Mathf.Infinity, LayerMask.GetMask("Ground")))
             {
                 _heroInput.HitPosition_Skill = hit.point;
             }
-            
+
             _heroInput.Owner = _Runner.LocalPlayer;
         }
+        
+        var ray2 = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray2, out var hit2, Mathf.Infinity, LayerMask.GetMask("Ground")))
+        {
+            _heroInput.MousePosition = new Vector3(hit2.point.x, 0, hit2.point.z);
+        }
+
         
         _heroInput.Buttons = new NetworkButtons(_heroInput.Buttons.Bits | buttons.Bits);
 
