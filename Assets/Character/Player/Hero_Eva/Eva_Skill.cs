@@ -31,7 +31,7 @@ public class Eva_Skill : HeroSkill
                 if (ButtonsPreviousQ == 0)
                 {
                     ButtonsPreviousQ = 1; 
-                    Skill_QQ(heroInput);
+                    Skill_Q(heroInput);
                 }
             }
             if (heroInput.Buttons.WasReleased(ButtonsPrevious, InputButton.SkillQ))
@@ -47,7 +47,7 @@ public class Eva_Skill : HeroSkill
     {
     }
 
-    private void Skill_QQ(HeroInput _heroInput)
+    private void Skill_Q(HeroInput _heroInput)
     {
         if (IsCasting) return;
         
