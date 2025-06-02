@@ -5,31 +5,26 @@ using UnityEngine;
 
 public class CameraController : NetworkBehaviour
 {
-    public Camera _Camera;
     public CinemachineCamera _CinemachineCamera;
     public Transform CameraPoint;
 
-    public float CameraMoveSpeed = 5f; // 카메라 이동 속도
+    public float CameraMoveSpeed = 10f; // 카메라 이동 속도
     public float ScreenEdgeThreshold = 10f;
-
-    private void Start()
-    {
-        _Camera = Camera.main;
-    }
-
+    
     public override void Spawned()
     {
         if(HasInputAuthority)
         {
              GameObject obj = GameObject.FindWithTag("CinemachineCamera");
              _CinemachineCamera = obj.GetComponent<CinemachineCamera>();
+             _CinemachineCamera.transform.position = CameraPoint.transform.position;
         }
     }
 
     private void Update()
     {
         if (!HasInputAuthority) return;
-        //CameraMoveToScreenEdge();
+        CameraMoveToScreenEdge();
 
         if (Input.GetKey(KeyCode.Space))
         {

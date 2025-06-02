@@ -1,55 +1,70 @@
 using System;
+using System.Collections;
 using Fusion;
 using UnityEngine;
 
-public class Eva_Skill : PlayerBase
+public class Eva_Skill : HeroSkill
 {
-     [SerializeField] private Animator _animator;
-     
+    private HeroInput heroInput;
+    [Networked] public NetworkButtons ButtonsPrevious { get; set; }
+    [Networked] private int ButtonsPreviousQ { get; set; }
 
-    private void Update()
+    [SerializeField] private GameObject _skillQ;
+    
+    private Vector3 _skillQDir {get; set;}
+    
+    public override void Spawned()
     {
-        
-        
+        ButtonsPreviousQ = 0;
     }
 
-    public override void Render()
+    public override void FixedUpdateNetwork()
     {
-        if( !HasInputAuthority ) return;
-        
-        if (Input.GetKeyDown(KeyCode.Q))
-        { 
-            //Skill_Q();
-            //QQ();
-        }
-    }
-
-    public void QQ()
-    {
-        _animator.SetTrigger("tSkill01");
-
-    }
-    protected override void Skill_Q()
-    {
-        Debug.Log("Q");
-        RPC_Server_Skill_Q();
-    }
-
-    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority, HostMode = RpcHostMode.SourceIsHostPlayer)]
-    private void RPC_Server_Skill_Q()
-    {
-        if (Runner.IsServer)
+        if (!HasStateAuthority) return;
+      
+        if (GetInput(out heroInput))
         {
-            Debug.Log("Server");
+            if(heroInput.Buttons.WasPressed(ButtonsPrevious, InputButton.SkillQ))
+            {
+                if (ButtonsPreviousQ == 0)
+                {
+                    ButtonsPreviousQ = 1;  
+                    Skill_Q();
+                }
+            }
+            if (heroInput.Buttons.WasReleased(ButtonsPrevious, InputButton.SkillQ))
+            {
+                ButtonsPreviousQ = 0;
+            }
         }
-        RPC_Multi_Skill_Q();
+        
+        ButtonsPrevious = heroInput.Buttons;
     }
     
-    [Rpc(RpcSources.StateAuthority, RpcTargets.All, HostMode = RpcHostMode.SourceIsServer)]
-    private void RPC_Multi_Skill_Q()
+    protected override void Skill_Q()
     {
-        _animator.SetTrigger("tSkill01");
+        GetComponent<HeroAnimation>().RPC_Multi_Skill_Q();
+        
+        _skillQDir = heroInput.HitPosition_Skill - gameObject.transform.position;
+        _skillQDir = new Vector3(_skillQDir.x, 0, _skillQDir.z);
+        
+        var no = Runner.Spawn(_skillQ, gameObject.transform.position, Quaternion.LookRotation(_skillQDir));
+       
+        no.GetComponent<Eva_Q>().Init(heroInput.Owner);
+        //Runner.StartCoroutine(SpawnCourutine(heroInput));
     }
+    
+    // IEnumerator SpawnCourutine(HeroInput _heroInput)
+    // {
+    //     yield return new WaitForSeconds(0.5f);
+    //     
+    //     _skillQDir = _heroInput.HitPosition_Skill - gameObject.transform.position;
+    //     _skillQDir = new Vector3(_skillQDir.x, 0, _skillQDir.z);
+    //     
+    //     var no = Runner.Spawn(_skillQ, gameObject.transform.position, Quaternion.LookRotation(_skillQDir));
+    //    
+    //     no.GetComponent<Eva_Q>().Init(_heroInput.Owner);
+    // }
     
     protected override void Skill_W()
     {

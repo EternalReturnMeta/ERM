@@ -21,7 +21,7 @@
         "SimulationUpdateTimeMode": 0,
         "PlayerCount": 10,
         "TickRateSelection": {
-            "Client": 256,
+            "Client": 64,
             "ServerIndex": 0,
             "ClientSendIndex": 1,
             "ServerSendIndex": 1
@@ -30,7 +30,7 @@
     },
     "Network": {
         "ConnectionTimeout": 180.0,
-        "ConnectionShutdownTime": 1.0,
+        "ConnectionShutdownTime": 6.61,
         "ReliableDataTransferModes": 3
     },
     "HostMigration": {

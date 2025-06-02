@@ -6,8 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Character/Character_Test.unity
-    guid: 5339469e80f4fe4478b95e1036213591
+    path: Assets/Scenes/Game_Cobalt.unity
+    guid: 828bc127e69aa3b49bfd563d8b0fc14e
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

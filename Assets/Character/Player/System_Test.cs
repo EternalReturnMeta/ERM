@@ -10,12 +10,7 @@ using UnityEngine.SceneManagement;
 public class System_Test : MonoBehaviour, INetworkRunnerCallbacks
 {
     [SerializeField] private NetworkPrefabRef _playerPrefab;
-    
-    [SerializeField] private GameObject spawnSpot1;
-    [SerializeField] private GameObject spawnSpot2;
-    [SerializeField] private GameObject spawnSpot3;
-    [SerializeField] private GameObject spawnSpot4;
-    
+
     private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
 
     private NetworkRunner _Runner;
@@ -56,30 +51,6 @@ public class System_Test : MonoBehaviour, INetworkRunnerCallbacks
     }
     
     #else
-
-    public void TeleportPlayer()
-    {
-        foreach (var player in _spawnedCharacters)
-        {
-            var pos = spawnSpot1.transform.position;
-            int randNum = UnityEngine.Random.Range(2, 5);
-
-            switch (randNum)
-            {
-                case 2:
-                    pos = spawnSpot2.transform.position;
-                    break;
-                case 3:
-                    pos = spawnSpot3.transform.position;
-                    break;
-                default:
-                    pos = spawnSpot4.transform.position;
-                    break;
-            }
-            
-            player.Value.GetComponent<PlayerMovement>().gameObject.transform.position = pos;
-        }
-    }
     
     private void OnGUI()
     {
@@ -132,30 +103,13 @@ public class System_Test : MonoBehaviour, INetworkRunnerCallbacks
     {
         if (runner.IsServer)
         {
+            // Create a unique position for the player
             NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, Vector3.zero, Quaternion.identity, player);
-            
+             
             runner.SetPlayerObject(player, networkPlayerObject);
             
             // Keep track of the player avatars for easy access
             _spawnedCharacters.Add(player, networkPlayerObject);
-            
-            var pos = spawnSpot1.transform.position;
-            int randNum = UnityEngine.Random.Range(2, 5);
-
-            switch (randNum)
-            {
-                case 2:
-                    pos = spawnSpot2.transform.position;
-                    break;
-                case 3:
-                    pos = spawnSpot3.transform.position;
-                    break;
-                default:
-                    pos = spawnSpot4.transform.position;
-                    break;
-            }
-            
-            networkPlayerObject.GetComponentInChildren<PlayerMovement>().gameObject.transform.position = pos;
         }
     }
 
@@ -173,6 +127,14 @@ public class System_Test : MonoBehaviour, INetworkRunnerCallbacks
 #if UNITY_SERVER
         return;
 #endif
+        if (runner.TryGetPlayerObject(runner.LocalPlayer, out NetworkObject networkObject))
+        {
+            if (networkObject.GetComponentInChildren<HeroState>().GetCurrHealth() <= 0f)
+            {
+                return;
+            }
+        }
+        
         if (resetInput)
         {
             resetInput = false;
@@ -203,8 +165,19 @@ public class System_Test : MonoBehaviour, INetworkRunnerCallbacks
             var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out var hit, Mathf.Infinity, LayerMask.GetMask("Ground")))
             {
-                _heroInput.HitPosition = hit.point;
+                _heroInput.HitPosition_RightClick = hit.point;
             }
+        }
+
+        if (keyboard.qKey.isPressed)
+        {
+            var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out var hit, Mathf.Infinity, LayerMask.GetMask("Ground")))
+            {
+                _heroInput.HitPosition_Skill = hit.point;
+            }
+            
+            _heroInput.Owner = _Runner.LocalPlayer;
         }
         
         _heroInput.Buttons = new NetworkButtons(_heroInput.Buttons.Bits | buttons.Bits);
