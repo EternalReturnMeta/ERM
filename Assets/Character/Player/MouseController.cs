@@ -14,7 +14,7 @@ public class MouseController : NetworkBehaviour
     private void Update()
     {
         if (!HasInputAuthority) return;
-        LockMouseToScreenEdge();
+        //LockMouseToScreenEdge();
     }
 
     private void LockMouseToScreenEdge()

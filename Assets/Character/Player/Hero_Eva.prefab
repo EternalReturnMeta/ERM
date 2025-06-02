@@ -14,12 +14,12 @@ GameObject:
   - component: {fileID: 6500628935853296315}
   - component: {fileID: 771094065078329187}
   - component: {fileID: 8519312922985508125}
-  - component: {fileID: 6077731192486083573}
   - component: {fileID: 3324649518296545766}
   - component: {fileID: 7150373323633404705}
   - component: {fileID: 7974946417651116082}
   - component: {fileID: 3357185057842711535}
   - component: {fileID: 3495802738994228847}
+  - component: {fileID: 1457162476372649435}
   m_Layer: 9
   m_Name: CharacterMesh
   m_TagString: Untagged
@@ -123,19 +123,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &6077731192486083573
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1526237333406210054}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 204b506a2790b8947877266b08f78158, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _skillQ: {fileID: 2831071643475020391, guid: 685368c3db50d1f41b4f81de010746c8, type: 3}
 --- !u!114 &3324649518296545766
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -151,8 +138,8 @@ MonoBehaviour:
   Animator: {fileID: 2807988997023748991}
   ApplyTiming: 2
   SyncSettings: 79
-  StateHashes: 000000000b5de581165a22c69b3620e27554e897d593958aad2d9deb
-  TriggerHashes: 00000000ba15b117
+  StateHashes: 000000000b5de581165a22c69b3620e27554e897d593958aad2d9deb8f1109a051ba48c3
+  TriggerHashes: 00000000ba15b1171e59b44b
   TotalWords: 2
 --- !u!136 &7150373323633404705
 CapsuleCollider:
@@ -255,6 +242,19 @@ MonoBehaviour:
     StepRequireGroundTarget: 0
     SnapDistance: 0.25
     SnapSpeed: 4
+--- !u!114 &1457162476372649435
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1526237333406210054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 204b506a2790b8947877266b08f78158, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _skillQ: {fileID: 2831071643475020391, guid: 685368c3db50d1f41b4f81de010746c8, type: 3}
 --- !u!1 &6691319552105888704
 GameObject:
   m_ObjectHideFlags: 0
@@ -310,10 +310,10 @@ MonoBehaviour:
   - {fileID: 3015478746565745762}
   - {fileID: 6500628935853296315}
   - {fileID: 771094065078329187}
-  - {fileID: 6077731192486083573}
   - {fileID: 3324649518296545766}
   - {fileID: 7974946417651116082}
   - {fileID: 3495802738994228847}
+  - {fileID: 1457162476372649435}
   ForceRemoteRenderTimeframe: 0
 --- !u!1 &8668578687282004704
 GameObject:
