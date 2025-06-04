@@ -25,7 +25,7 @@ public class HeroState : NetworkBehaviour, IDamageProcess
         return CurrHealth;
     }
 
-    public void TakeDamageOneHit(float damage)
+    public void OnTakeDamage(float damage)
     {
         CurrHealth -= damage;
         Debug.Log($"TakeDamage : {GetComponentInParent<NetworkObject>().InputAuthority} ==> 현재 피 {CurrHealth}");
@@ -40,42 +40,4 @@ public class HeroState : NetworkBehaviour, IDamageProcess
             GetComponent<Eva_AnimationController>().RPC_DeadProcess();
         }
     }
-
-    // public void TakeDamageLoopHitStart(float damage, float loopTerm)
-    // {
-    //     Debug.Log("TakeDamageLoopHitStart");
-    //     StartCoroutine(LoopHit(damage, loopTerm));
-    // }
-    //
-    //
-    // public void TakeDamageLoopHitStop()
-    // {
-    //     Debug.Log("TakeDamageLoopHitStop");
-    //     StopAllCoroutines();
-    // }
-    //
-    // public IEnumerator LoopHit(float damage, float loopTerm)
-    // {
-    //     Debug.Log("LoopHit");
-    //     while (true)
-    //     {
-    //         CurrHealth -= damage;
-    //         Debug.Log(CurrHealth);
-    //         
-    //         if (CurrHealth <= 0)
-    //         {
-    //             var navMeshAgent = GetComponent<NavMeshAgent>();
-    //             navMeshAgent.isStopped = true;
-    //             
-    //             Debug.Log("Dead");
-    //             
-    //             GetComponent<Eva_AnimationController>().RPC_DeadProcess();
-    //             TakeDamageLoopHitStop();
-    //             
-    //             yield break;
-    //         }
-    //         
-    //          yield return new WaitForSeconds(loopTerm);
-    //     }
-    //}
 }

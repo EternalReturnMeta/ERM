@@ -43,7 +43,7 @@ public class Eva_Q : NetworkBehaviour
         IDamageProcess damageProcess = other.GetComponent<IDamageProcess>();
         if (damageProcess != null && other.GetComponent<HeroState>().GetCurrHealth() > 0f)
         {
-            damageProcess.TakeDamageOneHit(10);
+            damageProcess.OnTakeDamage(10);
         }
         
     }

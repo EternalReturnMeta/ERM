@@ -53,12 +53,6 @@ public class Eva_R : NetworkBehaviour
         // 주인이 맞았다면
         if (other.GetComponentInParent<NetworkObject>().InputAuthority == owner) return;
         
-        // IDamageProcess damageProcess = other.GetComponent<IDamageProcess>();
-        //
-        // if (damageProcess != null)
-        // {
-        //     damageProcess.TakeDamageLoopHitStop();
-        // }
         Utility.RefreshToken(ref _cts);
     }
 
@@ -73,14 +67,13 @@ public class Eva_R : NetworkBehaviour
         
         while (damageProcess != null && other.GetComponent<HeroState>().GetCurrHealth() > 0f)
         {
-            damageProcess.TakeDamageOneHit(5f);
+            damageProcess.OnTakeDamage(5f);
             Debug.Log(other.GetComponent<HeroState>().GetCurrHealth());
             
             await UniTask.Delay(500, cancellationToken:token).SuppressCancellationThrow();
             
             if(token.IsCancellationRequested)
                 break;
-           
         }
     }
 }
