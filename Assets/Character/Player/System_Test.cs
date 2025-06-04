@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 
 public class System_Test : MonoBehaviour, INetworkRunnerCallbacks
 {
-    [SerializeField] private NetworkPrefabRef _playerPrefab;
+    [SerializeField] private NetworkPrefabRef _playerPrefab1;
 
     private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
 
@@ -104,7 +104,7 @@ public class System_Test : MonoBehaviour, INetworkRunnerCallbacks
         if (runner.IsServer)
         {
             // Create a unique position for the player
-            NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, Vector3.zero, Quaternion.identity, player);
+            NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab1, Vector3.zero, Quaternion.identity, player);
              
             runner.SetPlayerObject(player, networkPlayerObject);
             
