@@ -18,5 +18,5 @@ public struct HeroInput : INetworkInput
     public Vector3 HitPosition_Skill;
 
     public PlayerRef Owner;
-     
+    public Vector3 MousePosition;
 }

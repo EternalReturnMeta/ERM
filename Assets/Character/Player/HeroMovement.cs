@@ -20,12 +20,19 @@ public class HeroMovement : NetworkBehaviour
     private NavMeshPath path;
     private Vector3 lastPos;
     
+    public bool IsCastingSkill { get; set; }
     private void Awake()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
         path = new NavMeshPath();
 
         kcc = GetComponentInChildren<SimpleKCC>();
+        IsCastingSkill = false;
+    }
+
+    public SimpleKCC GetKcc()
+    {
+        return kcc;
     }
     
     public override void Spawned()
@@ -52,6 +59,7 @@ public class HeroMovement : NetworkBehaviour
             if (heroInput.HitPosition_RightClick != Vector3.zero)
             {
                 lastPos = heroInput.HitPosition_RightClick;
+                //IsCastingSkill = false;
             }
         }
         ButtonsPrevious = heroInput.Buttons;
@@ -86,7 +94,19 @@ public class HeroMovement : NetworkBehaviour
             
             var speed = baseSpeed * (60f / Runner.TickRate);
             var direction = (nextWaypoint - kcc.Position).normalized;
-            kcc.Move(direction * speed);
+            
+           
+            if (!IsCastingSkill)
+            {
+                kcc.Move(direction * speed);
+            }
+            else  //스킬 사용했다면 이동 중지
+            {
+                kcc.ResetVelocity();
+                OnMoveVelocityChanged?.Invoke(0);
+                return;
+            }
+            
             OnMoveVelocityChanged?.Invoke(1);
             
             float targetYaw = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
