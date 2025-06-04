@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using Fusion;
 using Fusion.Addons.SimpleKCC;
 using UnityEngine;
@@ -112,13 +111,10 @@ public class HeroMovement : NetworkBehaviour
             }
             else if(IsCastingSkill)  //스킬 사용했다면 이동 중지
             {
-                //Debug.Log("ddddddddddddddddddddddddddddd");
                 kcc.ResetVelocity();
                 OnMoveVelocityChanged?.Invoke(0);
                 return;
             }
-            
-            
             
             OnMoveVelocityChanged?.Invoke(1);
             

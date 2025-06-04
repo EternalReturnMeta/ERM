@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using Fusion;
 using UnityEngine;
@@ -123,25 +122,19 @@ public class Eva_Skill : HeroSkill
 
     protected override void Skill_R()
     {
-        // if (!IsActivating_R)
-        // {
-        //     var no = Runner.Spawn(_skillR, gameObject.transform.position, Quaternion.identity);
-        //     IsActivating_R = true;
-        //     animationController.RPC_Multi_Skill_R_Activate();
-        //     heroMovement.IsCastingSkill = true;
-        // }
-        // else
-        // {
-        //     IsActivating_R = false;
-        //     animationController.RPC_Multi_Skill_R_Deactivate();
-        //     heroMovement.IsCastingSkill = false;
-        // }
+       
     }
 
     private void Skill_R(HeroInput _heroInput)
     {
+        if (IsCasting && !IsActivating_R) return;
+        
+        
         if (!IsActivating_R)
         {
+            IsCasting = true;
+            IsActivating_R = true;
+            
             _skillQDir = _heroInput.HitPosition_Skill - gameObject.transform.position;
             _skillQDir = new Vector3(_skillQDir.x, 0, _skillQDir.z);
             Quaternion lookRotation = Quaternion.LookRotation(_skillQDir.normalized);
@@ -151,7 +144,6 @@ public class Eva_Skill : HeroSkill
             var no = skillR_Dummy = Runner.Spawn(_skillR, gameObject.transform.position, Quaternion.LookRotation(_skillQDir));
             no.GetComponent<Eva_R>().Init(_heroInput.Owner);
             
-            IsActivating_R = true;
             animationController.RPC_Multi_Skill_R_Activate();
             heroMovement.IsCastingSkill = true;
             Coroutine_R = StartCoroutine(Skill_R_Coroutine());
@@ -159,6 +151,8 @@ public class Eva_Skill : HeroSkill
         else
         {
             Runner.Despawn(skillR_Dummy);
+            
+            IsCasting = false;
             IsActivating_R = false;
             animationController.RPC_Multi_Skill_R_Deactivate();
             heroMovement.IsCastingSkill = false;

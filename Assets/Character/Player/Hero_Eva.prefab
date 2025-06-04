@@ -16,10 +16,10 @@ GameObject:
   - component: {fileID: 8519312922985508125}
   - component: {fileID: 3324649518296545766}
   - component: {fileID: 7150373323633404705}
-  - component: {fileID: 7974946417651116082}
   - component: {fileID: 3357185057842711535}
   - component: {fileID: 3495802738994228847}
   - component: {fileID: 1457162476372649435}
+  - component: {fileID: 6492763974940614161}
   m_Layer: 9
   m_Name: CharacterMesh
   m_TagString: Untagged
@@ -138,8 +138,8 @@ MonoBehaviour:
   Animator: {fileID: 2807988997023748991}
   ApplyTiming: 2
   SyncSettings: 79
-  StateHashes: 000000000b5de581165a22c69b3620e27554e897d593958aad2d9deb8f1109a051ba48c3
-  TriggerHashes: 00000000ba15b1171e59b44b
+  StateHashes: 000000000b5de581165a22c69b3620e27554e897d593958aad2d9deb8f1109a051ba48c3d44732785064e497619ac9b2c4de2e0dbf32da221a763d9d
+  TriggerHashes: 00000000ba15b1171e59b44b35e1db67
   TotalWords: 2
 --- !u!136 &7150373323633404705
 CapsuleCollider:
@@ -164,20 +164,6 @@ CapsuleCollider:
   m_Height: 2.5
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
---- !u!114 &7974946417651116082
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1526237333406210054}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65698241f092ade47bdae2b37a11ef1b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _CurrHealth: 0
-  _MaxHealth: 0
 --- !u!54 &3357185057842711535
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -256,6 +242,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _skillQ: {fileID: 2831071643475020391, guid: 685368c3db50d1f41b4f81de010746c8, type: 3}
   _skillR: {fileID: 1629214717962325, guid: 4f6ae2aac7520704abb5fba1bdb4edc4, type: 3}
+--- !u!114 &6492763974940614161
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1526237333406210054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ae75ca227f471b49947378160b7bb1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _CurrHealth: 0
+  _MaxHealth: 0
 --- !u!1 &6691319552105888704
 GameObject:
   m_ObjectHideFlags: 0
@@ -312,9 +312,9 @@ MonoBehaviour:
   - {fileID: 6500628935853296315}
   - {fileID: 771094065078329187}
   - {fileID: 3324649518296545766}
-  - {fileID: 7974946417651116082}
   - {fileID: 3495802738994228847}
   - {fileID: 1457162476372649435}
+  - {fileID: 6492763974940614161}
   ForceRemoteRenderTimeframe: 0
 --- !u!1 &8668578687282004704
 GameObject:

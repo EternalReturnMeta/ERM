@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Threading;
 using Character.Player;
 using Cysharp.Threading.Tasks;
@@ -9,10 +7,6 @@ using UnityEngine;
 public class Eva_R : NetworkBehaviour
 {
     private PlayerRef owner;
-
-    // private float damage = 5f;
-    // private float loopTerm = 0.25f;
-
     private CancellationTokenSource _cts;
 
     private void Awake()
@@ -40,11 +34,6 @@ public class Eva_R : NetworkBehaviour
      
         DamageLoop(other, _cts.Token).Forget();
         
-        // IDamageProcess damageProcess = other.GetComponent<IDamageProcess>();
-        // if (damageProcess != null && other.GetComponent<HeroState>().GetCurrHealth() > 0f)
-        // {
-        //     damageProcess.TakeDamageLoopHitStart(damage, loopTerm);
-        // }
     }
 
     private void OnTriggerExit(Collider other)
@@ -70,7 +59,7 @@ public class Eva_R : NetworkBehaviour
             damageProcess.OnTakeDamage(5f);
             Debug.Log(other.GetComponent<HeroState>().GetCurrHealth());
             
-            await UniTask.Delay(500, cancellationToken:token).SuppressCancellationThrow();
+            await UniTask.Delay(250, cancellationToken:token).SuppressCancellationThrow();
             
             if(token.IsCancellationRequested)
                 break;
