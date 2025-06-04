@@ -9,11 +9,11 @@ public class Weapon : MonoBehaviour
 
     private void Awake()
     {
-        briefCase.transform.SetParent(leftHand.transform);
-        briefCase.transform.localPosition = new Vector3(0f, 0f, -0.06f);
-        briefCase.transform.localRotation = Quaternion.Euler(0f, 90f, 0f);
-        
-        knife.transform.SetParent(rightHand.transform);
-        knife.transform.localPosition = new Vector3(0f, 0f, -0.06f);
+        // briefCase.transform.SetParent(leftHand.transform);
+        // briefCase.transform.localPosition = Vector3.zero;
+        // briefCase.transform.localRotation = Quaternion.Euler(0f, 90f, 0f);
+        //
+        // knife.transform.SetParent(rightHand.transform);
+        // knife.transform.localPosition = Vector3.zero;
     }
 }
