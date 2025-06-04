@@ -1,4 +1,5 @@
 using System;
+using Character.Player;
 using Fusion;
 using UnityEngine;
 
@@ -39,10 +40,10 @@ public class Eva_Q : NetworkBehaviour
         
         Debug.Log($"구체의 오너 : {owner} || 맞은넘 : {other.GetComponentInParent<NetworkObject>().InputAuthority} ==> 데미지 줄게");
      
-        IDamageable damageable = other.GetComponent<IDamageable>();
-        if (damageable != null && other.GetComponent<HeroState>().GetCurrHealth() > 0f)
+        IDamageProcess damageProcess = other.GetComponent<IDamageProcess>();
+        if (damageProcess != null && other.GetComponent<HeroState>().GetCurrHealth() > 0f)
         {
-            damageable.TakeDamage(10);
+            damageProcess.TakeDamageOneHit(10);
         }
         
     }

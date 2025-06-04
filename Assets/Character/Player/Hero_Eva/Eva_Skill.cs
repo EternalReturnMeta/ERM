@@ -148,7 +148,9 @@ public class Eva_Skill : HeroSkill
             
             heroMovement.GetKcc().SetLookRotation(lookRotation, true, false);
             
-            skillR_Dummy = Runner.Spawn(_skillR, gameObject.transform.position, Quaternion.LookRotation(_skillQDir));
+            var no = skillR_Dummy = Runner.Spawn(_skillR, gameObject.transform.position, Quaternion.LookRotation(_skillQDir));
+            no.GetComponent<Eva_R>().Init(_heroInput.Owner);
+            
             IsActivating_R = true;
             animationController.RPC_Multi_Skill_R_Activate();
             heroMovement.IsCastingSkill = true;
