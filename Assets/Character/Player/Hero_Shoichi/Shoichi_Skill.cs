@@ -47,7 +47,7 @@ public class Shoichi_Skill : HeroSkill
                 if (ButtonsPreviousQ == 0)
                 {
                     ButtonsPreviousQ = 1;  
-                    Skill_Q();
+                    Skill_Q_Uncharged(heroInput.Owner);
                     CoolDownEndTick.Set(0, Runner.Tick + Mathf.CeilToInt(QCoolDownDuration / Runner.DeltaTime));
                 }
             }
@@ -60,7 +60,7 @@ public class Shoichi_Skill : HeroSkill
         ButtonsPrevious = heroInput.Buttons;
     }
     
-    protected override void Skill_Q()
+    private void Skill_Q_Uncharged(PlayerRef player)
     {
         if (isCasting)
         {
@@ -70,22 +70,34 @@ public class Shoichi_Skill : HeroSkill
         isCasting = true;
         animationController.RPC_Multi_Skill_Q();
         heroMovement.IsCastingSkill = true;
-        StartCoroutine(SpawnHitBox());
+        StartCoroutine(SpawnHitBox(player));
     }
 
-    private IEnumerator SpawnHitBox()
+    private IEnumerator SpawnHitBox(PlayerRef player)
     {
         for (int i = 0; i < 8; i++)
         {
             yield return null;
         }
         
-        var hitBox = Runner.Spawn(hitBoxPrefab, gameObject.transform.position, Quaternion.identity);
+        var hitBox = Runner.Spawn(hitBoxPrefab, gameObject.transform.forward, Quaternion.identity);
+        hitBox.GetComponent<Shoichi_Q_Uncharged>().Init(player);
         hitBox.GetComponent<BoxCollider>().size = new Vector3(1f, 1f, 3f);
-        hitBox.GetComponent<BoxCollider>().center = new Vector3(0f, 0.5f, 1.5f);
+        hitBox.GetComponent<BoxCollider>().center = new Vector3(0f, 0.5f, 0.5f);
         
         heroMovement.IsCastingSkill = false;
         isCasting = false;
+        
+        for (int i = 0; i < 8; i++)
+        {
+            yield return null;
+        }
+        
+        Runner.Despawn(hitBox);
+    }
+
+    protected override void Skill_Q()
+    {
     }
 
     protected override void Skill_W()
