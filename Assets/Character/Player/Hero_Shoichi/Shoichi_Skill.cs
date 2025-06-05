@@ -4,8 +4,8 @@ using Fusion;
 
 public class Shoichi_Skill : HeroSkill
 {
-    [SerializeField] private GameObject knifePrefab;
-    [SerializeField] private GameObject hitBoxPrefab;
+    [SerializeField] private GameObject skillQChargedPrefab;
+    [SerializeField] private GameObject skillQUnchargedPrefab;
     
     private HeroInput heroInput;
     [Networked] public NetworkButtons ButtonsPrevious { get; set; }
@@ -46,8 +46,17 @@ public class Shoichi_Skill : HeroSkill
                 
                 if (ButtonsPreviousQ == 0)
                 {
-                    ButtonsPreviousQ = 1;  
-                    Skill_Q_Uncharged(heroInput.Owner);
+                    ButtonsPreviousQ = 1;
+
+                    if (IsQCharged == 0)
+                    {
+                        Skill_Q_Uncharged(heroInput.Owner);
+                    }
+                    else
+                    {
+                        Skill_Q_Charged(heroInput.Owner);
+                    }
+                    
                     CoolDownEndTick.Set(0, Runner.Tick + Mathf.CeilToInt(QCoolDownDuration / Runner.DeltaTime));
                 }
             }
@@ -72,20 +81,38 @@ public class Shoichi_Skill : HeroSkill
         
         heroMovement.IsCastingSkill = true;
         
-        var hitBox = Runner.Spawn(hitBoxPrefab, gameObject.transform.position, Quaternion.LookRotation(gameObject.transform.forward));
+        var hitBox = Runner.Spawn(skillQUnchargedPrefab, gameObject.transform.position, Quaternion.LookRotation(gameObject.transform.forward));
         hitBox.GetComponent<Shoichi_Q_Uncharged>().Init(player);
-        // hitBox.GetComponent<BoxCollider>().size = new Vector3(1f, 1f, 2.5f);
-        // hitBox.GetComponent<BoxCollider>().center = new Vector3(0f, 0.5f, 1.25f);
 
-        StartCoroutine(Skill_Q_Uncharged_Co());
+        StartCoroutine(SkillDuration(0.3f));
     }
 
-    public IEnumerator Skill_Q_Uncharged_Co()
+    private IEnumerator SkillDuration(float duration)
     {
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(duration);
         
         heroMovement.IsCastingSkill = false;
         isCasting = false;
+    }
+    
+    private void Skill_Q_Charged(PlayerRef player)
+    {
+        if (isCasting)
+        {
+            return;
+        }
+        
+        isCasting = true;
+        animationController.RPC_Multi_Skill_Q_Charged();
+        
+        heroMovement.IsCastingSkill = true;
+
+        IsQCharged = 0;
+        
+        var knife = Runner.Spawn(skillQChargedPrefab, gameObject.transform.position, Quaternion.LookRotation(gameObject.transform.forward));
+        knife.GetComponent<Shoichi_Q_Charged>().Init(player);
+
+        StartCoroutine(SkillDuration(0.3f));
     }
 
     protected override void Skill_Q()
