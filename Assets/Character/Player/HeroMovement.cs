@@ -53,6 +53,11 @@ public class HeroMovement : NetworkBehaviour
         PathCalculateAndMove();
     }
 
+    public override void Render()
+    {
+        
+    }
+
     private void PathCalculateAndMove()
     {
         if (IsDeath)

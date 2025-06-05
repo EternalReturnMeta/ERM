@@ -26,7 +26,7 @@ public class Eva_R : NetworkBehaviour
         await UniTask.Delay(500);
         
         if (this == null || gameObject == null) return;
-
+        
         var ps = GetComponent<ParticleSystem>();
         ps.Play();
         
