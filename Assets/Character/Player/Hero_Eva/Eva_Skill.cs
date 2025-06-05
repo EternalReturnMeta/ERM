@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using Fusion;
 using UnityEngine;
@@ -25,7 +24,10 @@ public class Eva_Skill : HeroSkill
     private Coroutine Coroutine_R;
 
     [Networked] private Vector3 skillR_Dir { get; set; }
-    private Vector3 Skill_R_MousePosition;
+    private Vector3 Skill_R_MousePosition { get; set; }
+
+    private bool a;
+
     public override void Spawned()
     {
         ButtonsPreviousQ = 0;
@@ -34,12 +36,28 @@ public class Eva_Skill : HeroSkill
         
         heroMovement = GetComponent<HeroMovement>();
         animationController = GetComponent<Eva_AnimationController>();
+        a = false;
     }
 
     public override void FixedUpdateNetwork()
     {
         if (!HasStateAuthority) return;
-      
+        
+        if (IsActivating_R)
+        {
+            if (skillR_Dummy != null)
+            {
+                skillR_Dir = (Skill_R_MousePosition - skillR_Dummy.transform.position).normalized;
+
+                // 현재 회전에서 목표 회전으로 천천히 이동
+                skillR_Dummy.transform.rotation = Quaternion.Slerp(skillR_Dummy.transform.rotation, Quaternion.LookRotation(skillR_Dir),
+                    Runner.DeltaTime * 0.5f // 속도 조정 (5.0f 값을 조절 가능)
+                );
+                
+                heroMovement.GetKcc().SetLookRotation(skillR_Dummy.transform.rotation, true, false);
+            }
+        }
+        
         if (GetInput(out heroInput))
         {
             // =================== 스킬 Q =======================================
@@ -123,61 +141,39 @@ public class Eva_Skill : HeroSkill
 
     protected override void Skill_R()
     {
-        // if (!IsActivating_R)
-        // {
-        //     var no = Runner.Spawn(_skillR, gameObject.transform.position, Quaternion.identity);
-        //     IsActivating_R = true;
-        //     animationController.RPC_Multi_Skill_R_Activate();
-        //     heroMovement.IsCastingSkill = true;
-        // }
-        // else
-        // {
-        //     IsActivating_R = false;
-        //     animationController.RPC_Multi_Skill_R_Deactivate();
-        //     heroMovement.IsCastingSkill = false;
-        // }
+       
     }
 
     private void Skill_R(HeroInput _heroInput)
     {
+        if (IsCasting && !IsActivating_R) return;
+        
+        
         if (!IsActivating_R)
         {
+            IsCasting = true;
+            IsActivating_R = true;
+            
             _skillQDir = _heroInput.HitPosition_Skill - gameObject.transform.position;
             _skillQDir = new Vector3(_skillQDir.x, 0, _skillQDir.z);
             Quaternion lookRotation = Quaternion.LookRotation(_skillQDir.normalized);
             
             heroMovement.GetKcc().SetLookRotation(lookRotation, true, false);
             
-            skillR_Dummy = Runner.Spawn(_skillR, gameObject.transform.position, Quaternion.LookRotation(_skillQDir));
-            IsActivating_R = true;
+            var no = skillR_Dummy = Runner.Spawn(_skillR, gameObject.transform.position, Quaternion.LookRotation(_skillQDir));
+            no.GetComponent<Eva_R>().Init(_heroInput.Owner);
+            
             animationController.RPC_Multi_Skill_R_Activate();
             heroMovement.IsCastingSkill = true;
-            Coroutine_R = StartCoroutine(Skill_R_Coroutine());
         }
         else
         {
             Runner.Despawn(skillR_Dummy);
+            
+            IsCasting = false;
             IsActivating_R = false;
             animationController.RPC_Multi_Skill_R_Deactivate();
             heroMovement.IsCastingSkill = false;
-            StopCoroutine(Coroutine_R);
         }
-    }
-
-    IEnumerator Skill_R_Coroutine()
-    {
-        while (true)
-        {
-            skillR_Dir = (Skill_R_MousePosition - skillR_Dummy.transform.position).normalized;
-
-            // 3. 현재 회전에서 목표 회전으로 천천히 이동
-            skillR_Dummy.transform.rotation = Quaternion.Slerp(skillR_Dummy.transform.rotation, Quaternion.LookRotation(skillR_Dir),
-                Runner.DeltaTime * 0.5f // 속도 조정 (5.0f 값을 조절 가능)
-            );
-
-            // 4. 다음 프레임 대기
-            yield return null;
-        }
-
     }
 }

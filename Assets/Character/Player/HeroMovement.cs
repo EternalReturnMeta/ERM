@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using Fusion;
 using Fusion.Addons.SimpleKCC;
 using UnityEngine;
@@ -21,6 +20,7 @@ public class HeroMovement : NetworkBehaviour
     private Vector3 lastPos;
     
     public bool IsCastingSkill { get; set; }
+    public bool IsDeath { get; set; }
     private void Awake()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
@@ -28,6 +28,7 @@ public class HeroMovement : NetworkBehaviour
 
         kcc = GetComponentInChildren<SimpleKCC>();
         IsCastingSkill = false;
+        IsDeath = false;
     }
 
     public SimpleKCC GetKcc()
@@ -54,6 +55,14 @@ public class HeroMovement : NetworkBehaviour
 
     private void PathCalculateAndMove()
     {
+        if (IsDeath)
+        {
+            kcc.ResetVelocity();
+            OnMoveVelocityChanged?.Invoke(0);
+            
+            return;
+        }
+        
         if (GetInput(out heroInput))
         {
             if (heroInput.HitPosition_RightClick != Vector3.zero)
@@ -100,7 +109,7 @@ public class HeroMovement : NetworkBehaviour
             {
                 kcc.Move(direction * speed);
             }
-            else  //스킬 사용했다면 이동 중지
+            else if(IsCastingSkill)  //스킬 사용했다면 이동 중지
             {
                 kcc.ResetVelocity();
                 OnMoveVelocityChanged?.Invoke(0);

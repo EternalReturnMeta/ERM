@@ -180,8 +180,8 @@ public class System_Test : MonoBehaviour, INetworkRunnerCallbacks
             _heroInput.Owner = _Runner.LocalPlayer;
         }
         
-        var ray2 = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray2, out var hit2, Mathf.Infinity, LayerMask.GetMask("Ground")))
+        var loopRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(loopRay, out var hit2, Mathf.Infinity, LayerMask.GetMask("Ground")))
         {
             _heroInput.MousePosition = new Vector3(hit2.point.x, 0, hit2.point.z);
         }

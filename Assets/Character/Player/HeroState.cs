@@ -1,16 +1,15 @@
+using Character.Player;
 using Fusion;
-using Fusion.Addons.KCC;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UI;
 
-public class HeroState : NetworkBehaviour, IDamageable
+public class HeroState : NetworkBehaviour
 {
     [Networked] [field:SerializeField]
-    private float CurrHealth {get; set;}
+    protected float CurrHealth {get; set;}
     
     [Networked] [field:SerializeField]
-    private float MaxHealth {get; set;}
+    protected float MaxHealth {get; set;}
     
     public override void Spawned()
     {
@@ -22,18 +21,5 @@ public class HeroState : NetworkBehaviour, IDamageable
     {
         return CurrHealth;
     }
-
-    public void TakeDamage(float damage)
-    {
-        CurrHealth -= damage;
-        Debug.Log($"TakeDamage : {GetComponentInParent<NetworkObject>().InputAuthority} ==> 현재 피 {CurrHealth}");
-
-        if (CurrHealth <= 0)
-        {
-            var navMeshAgent = GetComponent<NavMeshAgent>();
-            navMeshAgent.isStopped = true;
-            
-            //GetComponent<Shoichi_AnimationController>().RPC_DeadProcess();
-        }
-    }
+    
 }
