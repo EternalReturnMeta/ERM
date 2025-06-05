@@ -12,7 +12,7 @@ public class Shoichi_Skill : HeroSkill
     [Networked] private int ButtonsPreviousQ { get; set; }
     [Networked] public int IsQCharged { get; set; }
     [Networked, Capacity(4)] public NetworkArray<int> CoolDownEndTick => default;
-    private const float QCoolDownDuration = 8f;
+    private const float QCoolDownDuration = 3f;
     
     private HeroMovement heroMovement;
     private Shoichi_AnimationController animationController;
@@ -68,13 +68,21 @@ public class Shoichi_Skill : HeroSkill
         }
         
         isCasting = true;
-        animationController.RPC_Multi_Skill_Q();
+        animationController.RPC_Multi_Skill_Q_Uncharged();
+        
         heroMovement.IsCastingSkill = true;
         
         var hitBox = Runner.Spawn(hitBoxPrefab, gameObject.transform.position, Quaternion.LookRotation(gameObject.transform.forward));
         hitBox.GetComponent<Shoichi_Q_Uncharged>().Init(player);
-        hitBox.GetComponent<BoxCollider>().size = new Vector3(1f, 1f, 2.5f);
-        hitBox.GetComponent<BoxCollider>().center = new Vector3(0f, 0.5f, 1.25f);
+        // hitBox.GetComponent<BoxCollider>().size = new Vector3(1f, 1f, 2.5f);
+        // hitBox.GetComponent<BoxCollider>().center = new Vector3(0f, 0.5f, 1.25f);
+
+        StartCoroutine(Skill_Q_Uncharged_Co());
+    }
+
+    public IEnumerator Skill_Q_Uncharged_Co()
+    {
+        yield return new WaitForSeconds(0.3f);
         
         heroMovement.IsCastingSkill = false;
         isCasting = false;

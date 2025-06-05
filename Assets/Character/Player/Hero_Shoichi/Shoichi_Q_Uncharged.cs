@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Shoichi_Q_Uncharged : NetworkBehaviour
 {
+    [SerializeField] private GameObject effectPrefab;
     [Networked] private TickTimer life { get; set; }
     
     private PlayerRef owner;
@@ -33,6 +34,7 @@ public class Shoichi_Q_Uncharged : NetworkBehaviour
         {
             var boxCollider = GetComponent<BoxCollider>();
             boxCollider.enabled = true;
+            effectPrefab.SetActive(true);
         }
     }
 
