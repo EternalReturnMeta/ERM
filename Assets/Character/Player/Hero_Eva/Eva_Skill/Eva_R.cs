@@ -8,7 +8,7 @@ public class Eva_R : NetworkBehaviour
 {
     private PlayerRef owner;
     private CancellationTokenSource _cts;
-    public GameObject go;
+    [SerializeField] private GameObject HitVFX;
     
     private void Awake()
     {
@@ -21,6 +21,7 @@ public class Eva_R : NetworkBehaviour
         Debug.Log($"구체의 주인 : {owner}");
     }
 
+    
     public async UniTaskVoid ActiveInit()
     {
         await UniTask.Delay(500);
@@ -68,13 +69,28 @@ public class Eva_R : NetworkBehaviour
         
         while (damageProcess != null && other.GetComponent<HeroState>().GetCurrHealth() > 0f)
         {
-            damageProcess.OnTakeDamage(5f);
+            damageProcess.OnTakeDamage(2f);
             Debug.Log(other.GetComponent<HeroState>().GetCurrHealth());
             
-            await UniTask.Delay(250, cancellationToken:token).SuppressCancellationThrow();
+            if (Runner.IsServer)
+            {
+                var no = Runner.Spawn(HitVFX, other.transform.position + new Vector3(0, 1, 0), Quaternion.identity);
+                if (no != null)
+                {
+                    HitVFXDestroy(no).Forget();
+                }
+            }
+            await UniTask.Delay(100, cancellationToken:token).SuppressCancellationThrow();
             
             if(token.IsCancellationRequested)
                 break;
         }
+    }
+    
+    public async UniTaskVoid HitVFXDestroy(NetworkObject no)
+    {
+        await UniTask.Delay(1000);
+        
+        Runner.Despawn(no);
     }
 }

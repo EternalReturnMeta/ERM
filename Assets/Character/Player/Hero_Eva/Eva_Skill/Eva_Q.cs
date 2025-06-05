@@ -9,6 +9,7 @@ public class Eva_Q : NetworkBehaviour
     [Networked] private TickTimer life { get; set; }
 
     private PlayerRef owner;
+    [SerializeField] private GameObject HitVFX;
     
     public void Init(PlayerRef player)
     {
@@ -55,8 +56,25 @@ public class Eva_Q : NetworkBehaviour
         if (damageProcess != null && other.GetComponent<HeroState>().GetCurrHealth() > 0f)
         {
             damageProcess.OnTakeDamage(10);
+            
+            if (Runner.IsServer)
+            {
+                var no = Runner.Spawn(HitVFX, other.transform.position + new Vector3(0, 1, 0), Quaternion.identity);
+                HitVFXDestroy(no).Forget();
+            }
         }
         
+    }
+    
+    public async UniTaskVoid HitVFXDestroy(NetworkObject no)
+    {
+        await UniTask.Delay(1000);
+        
+        if (Runner.IsServer)
+        {
+            Runner.Despawn(no);
+        }
+       
     }
 
 }
