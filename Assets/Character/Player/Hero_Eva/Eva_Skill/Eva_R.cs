@@ -8,16 +8,28 @@ public class Eva_R : NetworkBehaviour
 {
     private PlayerRef owner;
     private CancellationTokenSource _cts;
-
+    public GameObject go;
+    
     private void Awake()
     {
         Utility.RefreshToken(ref _cts);
     }
-
+    
     public void Init(PlayerRef player)
     {
         owner = player;
         Debug.Log($"구체의 주인 : {owner}");
+    }
+
+    public async UniTaskVoid ActiveInit()
+    {
+        await UniTask.Delay(500);
+        
+        var ps = GetComponent<ParticleSystem>();
+        ps.Play();
+        
+        var bc = GetComponent<BoxCollider>();
+        bc.enabled = true;
     }
     
     private void OnTriggerEnter(Collider other)

@@ -1,5 +1,6 @@
-using System.Collections;
+using Cysharp.Threading.Tasks;
 using Fusion;
+using Fusion.Addons.Physics;
 using UnityEngine;
 
 public class Eva_Skill : HeroSkill
@@ -12,6 +13,7 @@ public class Eva_Skill : HeroSkill
     [SerializeField] private GameObject _skillQ;
     [SerializeField] private GameObject _skillR;
     private NetworkObject skillR_Dummy;
+    private NetworkObject skillQ_Dummy;
     
     private Vector3 _skillQDir {get; set;}
 
@@ -26,8 +28,6 @@ public class Eva_Skill : HeroSkill
     [Networked] private Vector3 skillR_Dir { get; set; }
     private Vector3 Skill_R_MousePosition { get; set; }
 
-    private bool a;
-
     public override void Spawned()
     {
         ButtonsPreviousQ = 0;
@@ -36,15 +36,19 @@ public class Eva_Skill : HeroSkill
         
         heroMovement = GetComponent<HeroMovement>();
         animationController = GetComponent<Eva_AnimationController>();
-        a = false;
     }
 
     public override void FixedUpdateNetwork()
     {
         if (!HasStateAuthority) return;
-        
         if (IsActivating_R)
         {
+            if (heroMovement.IsDeath)
+            {
+                Runner.Despawn(skillR_Dummy);
+                IsActivating_R = false;
+            }
+            
             if (skillR_Dummy != null)
             {
                 skillR_Dir = (Skill_R_MousePosition - skillR_Dummy.transform.position).normalized;
@@ -107,63 +111,71 @@ public class Eva_Skill : HeroSkill
         _skillQDir = new Vector3(_skillQDir.x, 0, _skillQDir.z);
         Quaternion lookRotation = Quaternion.LookRotation(_skillQDir.normalized);
         
+        var dir = Quaternion.LookRotation(_skillQDir);
+
         heroMovement.GetKcc().SetLookRotation(lookRotation, true, false);
         heroMovement.IsCastingSkill = true;
         
-        StartCoroutine(Skill_Q_Coroutine(_skillQDir, _heroInput.Owner));
-
+        Q_SpawnProcess(_heroInput, dir).Forget();
     }
 
-    IEnumerator Skill_Q_Coroutine(Vector3 _skillQDir2, PlayerRef _owner)
+  
+
+    private async UniTaskVoid Q_SpawnProcess(HeroInput hi, Quaternion dir)
     {
-        yield return new WaitForSeconds(0.3f);
-       
-        var no = Runner.Spawn(_skillQ, gameObject.transform.position, Quaternion.LookRotation(_skillQDir2));
-        no.GetComponent<Eva_Q>().Init(_owner);
+        await UniTask.Delay(300);
         
-        yield return new WaitForSeconds(0.3f);
+        skillQ_Dummy = Runner.Spawn(_skillQ, transform.position + new Vector3(0,1,0), Quaternion.LookRotation(_skillQDir));
+        skillQ_Dummy.GetComponent<Eva_Q>().Init(hi.Owner);
+        RPC_Skill_Q_Activate_Init(skillQ_Dummy);
+        
+        var nt = skillQ_Dummy.GetComponent<NetworkRigidbody3D>();
+        nt.Teleport(transform.position + new Vector3(0,1,0), dir);
+        
+        await UniTask.Delay(600);
+        
         heroMovement.IsCastingSkill = false;
         IsCasting = false;
     }
-    protected override void Skill_Q()
+    
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    public void RPC_Skill_Q_Activate_Init(NetworkObject no)
     {
+        var evaQ = no.GetComponent<Eva_Q>();
+        evaQ.ActiveInit().Forget();
     }
     
-    protected override void Skill_W()
-    {
-        
-    }
-
-    protected override void Skill_E()
-    {
-        
-    }
-
-    protected override void Skill_R()
-    {
-       
-    }
+    protected override void Skill_Q() {}
+    protected override void Skill_W() {}
+    protected override void Skill_E() {}
+    protected override void Skill_R() {}
 
     private void Skill_R(HeroInput _heroInput)
     {
         if (IsCasting && !IsActivating_R) return;
-        
         
         if (!IsActivating_R)
         {
             IsCasting = true;
             IsActivating_R = true;
             
-            _skillQDir = _heroInput.HitPosition_Skill - gameObject.transform.position;
+            _skillQDir = _heroInput.HitPosition_Skill - transform.position;
             _skillQDir = new Vector3(_skillQDir.x, 0, _skillQDir.z);
             Quaternion lookRotation = Quaternion.LookRotation(_skillQDir.normalized);
             
             heroMovement.GetKcc().SetLookRotation(lookRotation, true, false);
+
+            var dir = Quaternion.LookRotation(_skillQDir);
+            skillR_Dummy = Runner.Spawn(_skillR, transform.position, dir);
             
-            var no = skillR_Dummy = Runner.Spawn(_skillR, gameObject.transform.position, Quaternion.LookRotation(_skillQDir));
-            no.GetComponent<Eva_R>().Init(_heroInput.Owner);
+            skillR_Dummy.GetComponent<Eva_R>().Init(_heroInput.Owner);
             
-            animationController.RPC_Multi_Skill_R_Activate();
+            var nt = skillR_Dummy.GetComponent<NetworkTransform>();
+            nt.Teleport(transform.position, dir);
+            
+            RPC_Skill_R_Activate_Init(skillR_Dummy);
+            
+            animationController.RPC_Multi_Skill_R_Activate_Animation();
             heroMovement.IsCastingSkill = true;
         }
         else
@@ -172,8 +184,16 @@ public class Eva_Skill : HeroSkill
             
             IsCasting = false;
             IsActivating_R = false;
-            animationController.RPC_Multi_Skill_R_Deactivate();
+            animationController.RPC_Multi_Skill_R_Deactivate_Animation();
             heroMovement.IsCastingSkill = false;
         }
     }
+
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    public void RPC_Skill_R_Activate_Init(NetworkObject no)
+    {
+        var evaR = no.GetComponent<Eva_R>();
+        evaR.ActiveInit().Forget();
+    }
 }
+

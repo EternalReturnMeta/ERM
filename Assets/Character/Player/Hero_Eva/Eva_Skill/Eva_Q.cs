@@ -1,5 +1,6 @@
 using System;
 using Character.Player;
+using Cysharp.Threading.Tasks;
 using Fusion;
 using UnityEngine;
 
@@ -19,12 +20,22 @@ public class Eva_Q : NetworkBehaviour
         life = TickTimer.CreateFromSeconds(Runner, 5.0f);
     }
 
+    public async UniTaskVoid ActiveInit()
+    {
+        await UniTask.Delay(100);
+        
+        var ps = GetComponentInChildren<ParticleSystem>();
+        ps.Play();
+        
+        var sc = GetComponent<SphereCollider>();
+        sc.enabled = true;
+    }
     public override void FixedUpdateNetwork()
     {
         if(life.Expired(Runner))
             Runner.Despawn(Object);
         else
-            transform.position += 30 * transform.forward * Runner.DeltaTime;
+            transform.position += 15 * transform.forward * Runner.DeltaTime;
     }
     
     private void OnTriggerEnter(Collider other)
