@@ -76,6 +76,7 @@ namespace Fusion.Menu
             ConnectionArgs.Session = null;
             ConnectionArgs.Creating = false;
             ConnectionArgs.Region = ConnectionArgs.PreferredRegion;
+            ConnectionArgs.IsServer = true;
             
             var result = await Connection.ConnectAsync(ConnectionArgs);
             await HandleConnectionResult(result, this.Controller);
@@ -116,6 +117,7 @@ namespace Fusion.Menu
             ConnectionArgs.Session = null;
             ConnectionArgs.Creating = false;
             ConnectionArgs.Region = ConnectionArgs.PreferredRegion;
+            ConnectionArgs.IsServer = false;
             
             var result = await Connection.ConnectAsync(ConnectionArgs);
             await HandleConnectionResult(result, this.Controller);

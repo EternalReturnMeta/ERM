@@ -41,6 +41,7 @@ namespace Fusion.Menu
         int MaxPlayerCount { get; set; }
         PhotonMenuSceneInfo Scene { get; set; }
         bool Creating { get; set; }
+        bool IsServer { get; set; }
         void SetDefaults(IFusionMenuConfig config);
     }
 }
@@ -187,6 +188,7 @@ namespace Fusion.Menu
             set => PlayerPrefs.SetString("Photon.Menu.Scene", JsonUtility.ToJson(value));
         }
         public virtual bool Creating { get; set; }
+        public virtual bool IsServer { get; set; }
 
         partial void SetDefaultsUser(IFusionMenuConfig config);
 

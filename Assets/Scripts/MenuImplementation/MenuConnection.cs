@@ -181,13 +181,12 @@ namespace EternalReturn.Menu
             //     Debug.Log("Quick");
             //     return GameMode.AutoHostOrClient;
             // }
-            if (string.IsNullOrEmpty(args.Session))
+            // Debug.Log("Client");
+            if (args.IsServer)
             {
-                Debug.Log("Quick");
-                
                 return GameMode.Server;
             }
-            Debug.Log("Client");
+            
             return GameMode.Client;
         }
         // 네트워크 세션을 실행할 NetworkRunner 인스턴스를 Prefab으로 생성
