@@ -21,6 +21,8 @@ public class HeroMovement : NetworkBehaviour
     
     public bool IsCastingSkill { get; set; }
     public bool IsDeath { get; set; }
+    
+    [SerializeField] private GameObject ClickVFX;
     private void Awake()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
@@ -44,18 +46,28 @@ public class HeroMovement : NetworkBehaviour
             navMeshAgent.enabled = false;
         }
     }
+    private void Update()
+    {
+        if (!HasInputAuthority) return;
 
+        if (Input.GetKeyDown(KeyCode.Mouse1))
+        {
+            var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            
+            if (Physics.Raycast(ray, out var hit, Mathf.Infinity, LayerMask.GetMask("Ground")))
+            {
+                var hitPosition = hit.point;
+                var go = Instantiate(ClickVFX, hitPosition + new Vector3(0, 0.2f, 0), Quaternion.identity);
+                Destroy(go, 1f);
+            }
+        }
+    }
     public override void FixedUpdateNetwork() 
     {
         if (!HasStateAuthority)
             return;
-
-        PathCalculateAndMove();
-    }
-
-    public override void Render()
-    {
         
+        PathCalculateAndMove();
     }
 
     private void PathCalculateAndMove()
@@ -73,7 +85,6 @@ public class HeroMovement : NetworkBehaviour
             if (heroInput.HitPosition_RightClick != Vector3.zero)
             {
                 lastPos = heroInput.HitPosition_RightClick;
-                //IsCastingSkill = false;
             }
         }
         ButtonsPrevious = heroInput.Buttons;

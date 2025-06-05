@@ -60,6 +60,7 @@ MonoBehaviour:
     m_Bits: 1024
   navMeshAgent: {fileID: 0}
   baseSpeed: 5
+  ClickVFX: {fileID: 1943286446490004412, guid: e953460ff16e0a6459684f9b77202b5c, type: 3}
 --- !u!114 &3015478746565745762
 MonoBehaviour:
   m_ObjectHideFlags: 0

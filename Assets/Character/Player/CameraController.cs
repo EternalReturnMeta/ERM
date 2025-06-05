@@ -24,7 +24,7 @@ public class CameraController : NetworkBehaviour
     private void Update()
     {
         if (!HasInputAuthority) return;
-        //CameraMoveToScreenEdge();
+        CameraMoveToScreenEdge();
 
         if (Input.GetKey(KeyCode.Space))
         {
