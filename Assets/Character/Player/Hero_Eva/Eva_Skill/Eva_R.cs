@@ -21,11 +21,12 @@ public class Eva_R : NetworkBehaviour
         Debug.Log($"구체의 주인 : {owner}");
     }
 
-    
     public async UniTaskVoid ActiveInit()
     {
         await UniTask.Delay(500);
         
+        if (this == null || gameObject == null) return;
+
         var ps = GetComponent<ParticleSystem>();
         ps.Play();
         
@@ -93,4 +94,6 @@ public class Eva_R : NetworkBehaviour
         
         Runner.Despawn(no);
     }
+    
+    
 }
