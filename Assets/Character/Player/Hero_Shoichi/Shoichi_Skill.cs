@@ -70,30 +70,14 @@ public class Shoichi_Skill : HeroSkill
         isCasting = true;
         animationController.RPC_Multi_Skill_Q();
         heroMovement.IsCastingSkill = true;
-        StartCoroutine(SpawnHitBox(player));
-    }
-
-    private IEnumerator SpawnHitBox(PlayerRef player)
-    {
-        for (int i = 0; i < 8; i++)
-        {
-            yield return null;
-        }
         
-        var hitBox = Runner.Spawn(hitBoxPrefab, gameObject.transform.forward, Quaternion.identity);
+        var hitBox = Runner.Spawn(hitBoxPrefab, gameObject.transform.position, Quaternion.LookRotation(gameObject.transform.forward));
         hitBox.GetComponent<Shoichi_Q_Uncharged>().Init(player);
-        hitBox.GetComponent<BoxCollider>().size = new Vector3(1f, 1f, 3f);
-        hitBox.GetComponent<BoxCollider>().center = new Vector3(0f, 0.5f, 0.5f);
+        hitBox.GetComponent<BoxCollider>().size = new Vector3(1f, 1f, 2.5f);
+        hitBox.GetComponent<BoxCollider>().center = new Vector3(0f, 0.5f, 1.25f);
         
         heroMovement.IsCastingSkill = false;
         isCasting = false;
-        
-        for (int i = 0; i < 8; i++)
-        {
-            yield return null;
-        }
-        
-        Runner.Despawn(hitBox);
     }
 
     protected override void Skill_Q()

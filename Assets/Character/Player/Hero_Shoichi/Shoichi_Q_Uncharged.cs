@@ -1,10 +1,41 @@
+using Character.Player;
 using Fusion;
 using UnityEngine;
 
 public class Shoichi_Q_Uncharged : NetworkBehaviour
 {
-    private PlayerRef owner;
+    [Networked] private TickTimer life { get; set; }
     
+    private PlayerRef owner;
+
+    public override void Spawned()
+    {
+        life = TickTimer.CreateFromSeconds(Runner, 1f);
+    }
+
+    public override void FixedUpdateNetwork()
+    {
+        if (life.Expired(Runner))
+        {
+            if (Runner.TryGetPlayerObject(owner, out NetworkObject networkObject))
+            {
+                var skillState = networkObject.GetComponentInChildren<Shoichi_Skill>();
+
+                if (skillState.IsQCharged == 1)
+                {
+                    networkObject.GetComponentInChildren<Shoichi_AnimationController>().RPC_Q_Charged();
+                }
+            }
+            
+            Runner.Despawn(Object);
+        }
+        else if (life.RemainingTime(Runner) <= 0.8f)
+        {
+            var boxCollider = GetComponent<BoxCollider>();
+            boxCollider.enabled = true;
+        }
+    }
+
     public void Init(PlayerRef player)
     {
         owner = player;
@@ -22,11 +53,21 @@ public class Shoichi_Q_Uncharged : NetworkBehaviour
         }
         
         Debug.Log($"구체의 오너 : {owner} || 맞은넘 : {other.GetComponentInParent<NetworkObject>().InputAuthority} ==> 데미지 줄게");
-     
-        IDamageable damageable = other.GetComponent<IDamageable>();
-        if (damageable != null && other.GetComponent<HeroState>().GetCurrHealth() > 0f)
+        
+        if (Runner.TryGetPlayerObject(owner, out NetworkObject networkObject))
         {
-            damageable.TakeDamage(10);
+            var skillState = networkObject.GetComponentInChildren<Shoichi_Skill>();
+
+            if (skillState.IsQCharged == 0)
+            {
+                skillState.IsQCharged = 1;
+            }
+        }
+     
+        IDamageProcess damageProcess = other.GetComponent<IDamageProcess>();
+        if (damageProcess != null && other.GetComponent<HeroState>().GetCurrHealth() > 0f)
+        {
+            damageProcess.OnTakeDamage(10);
         }
     }
 }

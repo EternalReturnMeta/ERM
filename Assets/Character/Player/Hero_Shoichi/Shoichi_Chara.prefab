@@ -2142,7 +2142,7 @@ GameObject:
   - component: {fileID: 9143064050472924891}
   - component: {fileID: 9010029935873425024}
   - component: {fileID: 5705076786535760302}
-  - component: {fileID: 6531177924753315664}
+  - component: {fileID: 2158120167636409480}
   m_Layer: 0
   m_Name: Shoichi_Chara
   m_TagString: Untagged
@@ -2349,7 +2349,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 95825355128515762}
-  _MoveVelocity: 0
+  briefCaseAnimator: {fileID: 8260443266003891221}
 --- !u!114 &5705076786535760302
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2366,7 +2366,7 @@ MonoBehaviour:
   hitBoxPrefab: {fileID: 4366191361974930260, guid: 4fe59f33a82b86f4ab907f3a2a43fa83, type: 3}
   _IsQCharged: 0
   _CoolDownEndTick: 
---- !u!114 &6531177924753315664
+--- !u!114 &2158120167636409480
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2375,7 +2375,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1454912504990086}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65698241f092ade47bdae2b37a11ef1b, type: 3}
+  m_Script: {fileID: 11500000, guid: 517fd4011fba4a5ab4d056c818bc73eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _CurrHealth: 0
@@ -4699,6 +4699,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0ddc508ac3ffdea408579dd5013e6f1c, type: 3}
+--- !u!95 &8260443266003891221 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 95563715873174196, guid: 0ddc508ac3ffdea408579dd5013e6f1c, type: 3}
+  m_PrefabInstance: {fileID: 8354599328087836321}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8349893203061382474 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4987882683538411, guid: 0ddc508ac3ffdea408579dd5013e6f1c, type: 3}
