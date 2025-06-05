@@ -92,6 +92,7 @@ public class Eva_R : NetworkBehaviour
     {
         await UniTask.Delay(1000);
         
+        if (this == null || gameObject == null) return;
         Runner.Despawn(no);
     }
     

@@ -170,16 +170,22 @@ namespace EternalReturn.Menu
         // GameMode를 설정하는 함수
         private GameMode ResolveGameMode(IFusionMenuConnectArgs args)
         {
-            if (args.Creating)
-            {
-                Debug.Log("Host");
-                return GameMode.Host;
-            }
-
+            // if (args.Creating)
+            // {
+            //     Debug.Log("Host");
+            //     return GameMode.Host;
+            // }
+            //
+            // if (string.IsNullOrEmpty(args.Session))
+            // {
+            //     Debug.Log("Quick");
+            //     return GameMode.AutoHostOrClient;
+            // }
             if (string.IsNullOrEmpty(args.Session))
             {
                 Debug.Log("Quick");
-                return GameMode.AutoHostOrClient;
+                
+                return GameMode.Server;
             }
             Debug.Log("Client");
             return GameMode.Client;

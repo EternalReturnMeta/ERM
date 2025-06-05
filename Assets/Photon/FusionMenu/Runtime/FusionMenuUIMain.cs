@@ -56,7 +56,7 @@ namespace Fusion.Menu
         }
 
         // 메인 메뉴 화면이 열릴 떄 실행
-        public override void Show()
+        public override async void Show()
         {
             base.Show();
             // 네임 설정 View false
@@ -72,6 +72,14 @@ namespace Fusion.Menu
                 Debug.LogWarning("No valid scene to start found. Configure the menu config.");
             }
             ShowUser();
+#if UNITY_SERVER            
+            ConnectionArgs.Session = null;
+            ConnectionArgs.Creating = false;
+            ConnectionArgs.Region = ConnectionArgs.PreferredRegion;
+            
+            var result = await Connection.ConnectAsync(ConnectionArgs);
+            await HandleConnectionResult(result, this.Controller);
+#endif
         }
 
         public override void Hide()
@@ -121,6 +129,7 @@ namespace Fusion.Menu
             {
                 if (result.Success) {
                     controller.Show<MatchingModal>();
+                    
                 } 
                 else if (result.FailReason != ConnectFailReason.ApplicationQuit)
                 {
