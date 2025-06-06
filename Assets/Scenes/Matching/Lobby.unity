@@ -21596,6 +21596,7 @@ MonoBehaviour:
   playerData:
   - {fileID: 11400000, guid: 9934349fb5c8a324898ed1005169686d, type: 2}
   - {fileID: 11400000, guid: ddbedee2a1e48984f96c8edb8ad3cb94, type: 2}
+  - {fileID: 11400000, guid: 89f91d3e5d4f8c542aa82ab925a66e87, type: 2}
   playerImages:
   - {fileID: 6962598499194390050}
   - {fileID: 8248162873813303632}

@@ -8,6 +8,7 @@ public enum CharacterDataEnum
 {
     Eva,
     Shoichi,
+    None,
 }
 namespace Fusion.Menu
 {
@@ -57,34 +58,36 @@ namespace Fusion.Menu
             {
                 return;
             }
-            // var sortedPlayers = MatchingManager.Instance.SelectedCharacters
-            //     .OrderBy(pair => pair.Key.PlayerId)
-            //     .ToList();
-            foreach (var pair in MatchingManager.Instance.SelectedCharacters)
-            {
-                var a = pair.Key.PlayerId - 1;
-                int charId = (int)pair.Value;
-                if (a < playerImages.Length && charId < playerData.Length)
-                {
-                    playerImages[a].color = new Color(1f, 1f, 1f, 1f);
-                    playerImages[a].sprite = playerData[charId].vsImage;
-                }
-            }
-            // 모든 이미지 초기화
-            // foreach (var img in playerImages)
+            var sortedPlayers = MatchingManager.Instance.SelectedCharacters
+                .OrderBy(pair => pair.Key.PlayerId)
+                .ToList();
+            // foreach (var pair in MatchingManager.Instance.SelectedCharacters)
             // {
-            //     img.color = new Color(1, 1, 1, 0f);
-            //     img.sprite = null;
-            // }
-            // for (int i = 0; i <= sortedPlayers.Count && i < playerImages.Length; i++)
-            // {
-            //     int charId = (int)sortedPlayers[i].Value;
-            //     if (charId < playerData.Length)
+            //     var a = pair.Key.PlayerId - 1;
+            //     int charId = (int)pair.Value;
+            //     if (a < playerImages.Length && charId < playerData.Length)
             //     {
-            //         playerImages[i].color = new Color(1f, 1f, 1f, 1f);
-            //         playerImages[i].sprite = playerData[charId].vsImage;
+            //         playerImages[a].color = new Color(1f, 1f, 1f, 1f);
+            //         playerImages[a].sprite = playerData[charId].vsImage;
             //     }
             // }
+            // 모든 이미지 초기화
+            foreach (var img in playerImages)
+            {
+                img.color = new Color(1, 1, 1, 0f);
+                img.sprite = null;
+            }
+            for (int i = 0; i < sortedPlayers.Count && i < playerImages.Length; i++)
+            {
+                int charId = (int)sortedPlayers[i].Value;
+                if (charId == 2)
+                    continue;
+                if (charId < playerData.Length)
+                {
+                    playerImages[i].color = new Color(1f, 1f, 1f, 1f);
+                    playerImages[i].sprite = playerData[charId].vsImage;
+                }
+            }
         }
         
         public void UpdateMyCharacterImage(CharacterDataEnum characterId)

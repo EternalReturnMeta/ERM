@@ -131,7 +131,6 @@ namespace Fusion.Menu
             {
                 if (result.Success) {
                     controller.Show<MatchingModal>();
-                    
                 } 
                 else if (result.FailReason != ConnectFailReason.ApplicationQuit)
                 {

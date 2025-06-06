@@ -87,6 +87,7 @@ public class MatchingManager : NetworkBehaviour
     private void RPC_ShowLoading()
     {
         Controller.Show<FusionMenuUILoading>();
+        
     }
 
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]

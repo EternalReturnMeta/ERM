@@ -40,6 +40,25 @@ namespace Fusion.Menu
         {
             base.Show();
             _countCoroutine = StartCoroutine(CountCoroutine(duration));
+            
+            var manager = MatchingManager.Instance;
+            PlayerNetworkObject myPlayer = null;
+            if (manager != null)
+            { 
+                PlayerRef myObj = MatchingManager.Instance.Runner.LocalPlayer;
+                if (MatchingManager.Instance.Runner.TryGetPlayerObject(myObj, out var networkObject))
+                {
+                    // myPlayer = networkObject.GetComponent<PlayerNetworkObject>();
+                    myPlayer = networkObject.GetComponent<PlayerNetworkObject>();
+                }
+                else
+                {
+                    Debug.Log("TryGetPlayerObject failed");
+                }
+            
+                if (myPlayer != null) 
+                    myPlayer.Rpc_RequestSelectCharacter(CharacterDataEnum.None);
+            }
             ShowUser();
         }
 
