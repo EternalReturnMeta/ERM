@@ -4,22 +4,17 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum CharacterDataEnum
-{
-    Eva,
-    Shoichi,
-    None,
-}
 namespace Fusion.Menu
 {
     public partial class FusionMenuUICharacterSelect : FusionMenuUIScreen
     {
-        private float duration = 60f;
+        private float duration = 20f;
         private Coroutine _countCoroutine;
         [SerializeField] private  TMP_Text _countText;
         [SerializeField] private Image countGauge;
         [SerializeField] private CharacterData[] playerData;
         [SerializeField] private Image[] playerImages;
+        [SerializeField] private TMP_Text[] playerNames;
         [SerializeField] private Image FullImage;
         [SerializeField] private GameObject Deco;
         [SerializeField] private TMP_Text _characterName;
@@ -61,16 +56,7 @@ namespace Fusion.Menu
             var sortedPlayers = MatchingManager.Instance.SelectedCharacters
                 .OrderBy(pair => pair.Key.PlayerId)
                 .ToList();
-            // foreach (var pair in MatchingManager.Instance.SelectedCharacters)
-            // {
-            //     var a = pair.Key.PlayerId - 1;
-            //     int charId = (int)pair.Value;
-            //     if (a < playerImages.Length && charId < playerData.Length)
-            //     {
-            //         playerImages[a].color = new Color(1f, 1f, 1f, 1f);
-            //         playerImages[a].sprite = playerData[charId].vsImage;
-            //     }
-            // }
+
             // 모든 이미지 초기화
             foreach (var img in playerImages)
             {
@@ -87,6 +73,15 @@ namespace Fusion.Menu
                     playerImages[i].color = new Color(1f, 1f, 1f, 1f);
                     playerImages[i].sprite = playerData[charId].vsImage;
                 }
+            }
+            
+            var sortedUser = MatchingManager.Instance.SelectedUser
+                .OrderBy(pair => pair.Key.PlayerId)
+                .ToList();
+            for (int i = 0; i < sortedUser.Count && i < playerImages.Length; i++)
+            {
+                string name = sortedUser[i].Value;
+                playerNames[i].text = name;
             }
         }
         

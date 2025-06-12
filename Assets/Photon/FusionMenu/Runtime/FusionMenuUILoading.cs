@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using Fusion.Photon.Realtime;
 using TMPro;
 
 namespace Fusion.Menu
@@ -24,6 +26,12 @@ namespace Fusion.Menu
         partial void ShowUser();
         partial void HideUser();
 
+        // public void OnEnable()
+        // {
+        //     Debug.Log("작동완료");
+        //     SettingUserCharacter();
+        // }
+
         public override void Awake()
         {
             base.Awake();
@@ -40,7 +48,19 @@ namespace Fusion.Menu
         {
             base.Show();
             _countCoroutine = StartCoroutine(CountCoroutine(duration));
-            
+            ShowUser();
+        }
+
+        
+
+        public override void Hide()
+        {
+            base.Hide();
+            HideUser();
+        }
+
+        public void SettingUserCharacter()
+        {
             var manager = MatchingManager.Instance;
             PlayerNetworkObject myPlayer = null;
             if (manager != null)
@@ -55,17 +75,13 @@ namespace Fusion.Menu
                 {
                     Debug.Log("TryGetPlayerObject failed");
                 }
-            
-                if (myPlayer != null) 
-                    myPlayer.Rpc_RequestSelectCharacter(CharacterDataEnum.None);
-            }
-            ShowUser();
-        }
 
-        public override void Hide()
-        {
-            base.Hide();
-            HideUser();
+                if (myPlayer != null)
+                {
+                    myPlayer.Rpc_RequestSelectCharacter(CharacterDataEnum.None);
+                    myPlayer.Rpc_RequestSelectUser(ConnectionArgs.Username);
+                }
+            }
         }
         
         private IEnumerator CountCoroutine(float duration)
@@ -87,11 +103,12 @@ namespace Fusion.Menu
 
                 yield return null;
             }
-
+            
             // 최종 값 보정
             countGague.fillAmount = 1f;
             _countText.text = "5";
             _countCoroutine = null;
+            SettingUserCharacter();
         }
     }
 }

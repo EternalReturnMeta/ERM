@@ -734,6 +734,14 @@ namespace Fusion.Menu
                 Debug.LogError($"Show() - Screen type '{typeof(S).Name}' not found");
             }
         }
+
+        public virtual void Hide<S>() where S : FusionMenuUIScreen
+        {
+            if (_screenLookup.TryGetValue(typeof(S), out var result))
+            {
+                result.Hide();
+            }
+        }
         // _screenLookup에서 타입 S에 해당하는 화면이 있으면 그것을 반환
         public virtual S Get<S>() where S : FusionMenuUIScreen
         {
@@ -835,20 +843,20 @@ namespace Fusion.Menu
         // 플러그인에도 Hide(this) 호출
         public virtual void Hide()
         {
-            if (_animator)
-            {
-                if (_hideCoroutine != null)
-                    StopCoroutine(_hideCoroutine);
-                _hideCoroutine = StartCoroutine(HideAnimCoroutine());
-                return;
-            }
-            
-            IsShowing = false;
-
-            foreach (var p in _plugins)
-            {
-                p.Hide(this);
-            }
+            // if (_animator)
+            // {
+            //     if (_hideCoroutine != null)
+            //         StopCoroutine(_hideCoroutine);
+            //     _hideCoroutine = StartCoroutine(HideAnimCoroutine());
+            //     return;
+            // }
+            //
+            // IsShowing = false;
+            //
+            // foreach (var p in _plugins)
+            // {
+            //     p.Hide(this);
+            // }
             gameObject.SetActive(false);
         }
         // 화면을 표시하는 메서드

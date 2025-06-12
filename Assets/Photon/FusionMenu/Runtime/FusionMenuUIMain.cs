@@ -72,7 +72,9 @@ namespace Fusion.Menu
                 Debug.LogWarning("No valid scene to start found. Configure the menu config.");
             }
             ShowUser();
+            
 #if UNITY_SERVER            
+            Debug.unityLogger.logEnabled = false;
             ConnectionArgs.Session = null;
             ConnectionArgs.Creating = false;
             ConnectionArgs.Region = ConnectionArgs.PreferredRegion;
@@ -122,7 +124,7 @@ namespace Fusion.Menu
             var result = await Connection.ConnectAsync(ConnectionArgs);
             await HandleConnectionResult(result, this.Controller);
         }
-
+        
         // 연결 성공 시 GamePlay 화면으로 이동
         // 실패 시 오류 팝업 표시
         public static async Task HandleConnectionResult(ConnectResult result, IFusionMenuUIController controller)
